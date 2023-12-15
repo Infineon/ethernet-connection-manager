@@ -104,15 +104,14 @@ Supported Platforms</h1>
 <p >This library and its features are supported on the following Infineon platforms:</p><ul>
 <li><a href="https://www.infineon.com/KIT_XMC72_EVK">XMC7200D-E272K8384 kit (KIT-XMC72-EVK)</a></li>
 </ul>
-<h1><a class="anchor" id="section_dependencies"></a>
-Dependent Libraries</h1>
-<ul>
-<li><a href="https://github.com/Infineon/lwip-network-interface-integration">lwip network interface integration Core</a></li>
-<li><a href="https://github.com/Infineon/freertos">Freertos</a></li>
-<li><a href="https://github.com/Infineon/lwip-freertos-integration">lwip freertos integration</a></li>
-</ul>
 <h1><a class="anchor" id="section_integration"></a>
 Quick Start</h1>
+<ul>
+<li>To use ethernet-connection-manager library on FreeRTOS, lwIP, and Mbed TLS combination, the application should pull <a href="https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls">ethernet-core-freertos-lwip-mbedtls</a> library which will internally pull secure-sockets, ethernet-connection-manager, FreeRTOS, lwIP, Mbed TLS and other dependent modules. To pull ethernet-core-freertos-lwip-mbedtls create the following *.mtb* file in deps folder.<ul>
+<li>ethernet-core-freertos-lwip-mbedtls.mtb: <a href="https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls#latest-v1.X#$$ASSET_REPO$$/ethernet-core-freertos-lwip-mbedtls/latest-v1.X">https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls#latest-v1.X#$$ASSET_REPO$$/ethernet-core-freertos-lwip-mbedtls/latest-v1.X</a></li>
+</ul>
+</li>
+</ul>
 <p >The ECM library disables all the debug log messages by default. To enable log messages, the application must perform the following:</p><ol type="1">
 <li>Add the <code>ENABLE_ECM_LOGS</code> macro to the <em>DEFINES</em> in the code example's Makefile. The Makefile entry would look like as follows: <div class="fragment"><div class="line">DEFINES+=ENABLE_ECM_LOGS</div>
 </div><!-- fragment --></li>

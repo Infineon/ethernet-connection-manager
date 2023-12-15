@@ -26,25 +26,19 @@ This library and its features are supported on the following Infineon platforms:
 
 - [XMC7200D-E272K8384 kit (KIT-XMC72-EVK)](https://www.infineon.com/KIT_XMC72_EVK)
 
-## Log messages
+## Quick Start
+1. To use ethernet-connection-manager library on FreeRTOS, lwIP, and Mbed TLS combination, the application should pull [ethernet-core-freertos-lwip-mbedtls](https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls) library which will internally pull secure-sockets, ethernet-connection-manager, FreeRTOS, lwIP, Mbed TLS and other dependent modules.
+To pull ethernet-core-freertos-lwip-mbedtls create the following *.mtb* file in deps folder.
+   - *ethernet-core-freertos-lwip-mbedtls.mtb:*
+      `https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls#latest-v1.X#$$ASSET_REPO$$/ethernet-core-freertos-lwip-mbedtls/latest-v1.X`
 
-By default, the Ethernet Connection Manager library disables all debug log messages. Do the following to enable log messages:
+2. By default, the Ethernet Connection Manager library disables all debug log messages. Do the following to enable log messages:
+    - Add the `ENABLE_ECM_LOGS` macro to the `DEFINES` in the code example's Makefile. The Makefile entry should look like as follows:
+       ```
+       DEFINES+=ENABLE_ECM_LOGS
+       ```
+    - Call the `cy_log_init()` function provided by the *cy-log* module. cy-log is part of the *connectivity-utilities* library. See [connectivity-utilities library API documentation](https://infineon.github.io/connectivity-utilities/api_reference_manual/html/group__logging__utils.html) for cy-log details.
 
-1. Add the `ENABLE_ECM_LOGS` macro to the `DEFINES` in the code example's Makefile. The Makefile entry should look like as follows:
-   ```
-   DEFINES+=ENABLE_ECM_LOGS
-   ```
-2. Call the `cy_log_init()` function provided by the *cy-log* module. cy-log is part of the *connectivity-utilities* library. See [connectivity-utilities library API documentation](https://infineon.github.io/connectivity-utilities/api_reference_manual/html/group__logging__utils.html) for cy-log details.
-
-## Dependencies
-
-The Ethernet Connection Manager library depends on the following:
-
-- [lwIP Network Interface Integration](https://github.com/Infineon/lwip-network-interface-integration)
-
-- [Freertos](https://github.com/Infineon/Freertos)
-
-- [lwIP FreeRTOS Integration](https://github.com/Infineon/lwip-freertos-integration)
 
 ## Additional information
 
