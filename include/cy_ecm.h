@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -33,6 +33,7 @@
 #pragma once
 
 #include "cy_ecm_error.h"
+#include "cy_ephy.h"
 
 /**
 * @file cy_ecm.h
@@ -117,9 +118,9 @@ typedef enum
 typedef enum
 {
     CY_ECM_SPEED_TYPE_MII,   /**< Media-Independent Interface (MII) */
+    CY_ECM_SPEED_TYPE_RMII,  /**< Reduced Media-Independent Interface (RMII) */
     CY_ECM_SPEED_TYPE_GMII,  /**< Gigabit Media-Independent Interface (GMII) */
-    CY_ECM_SPEED_TYPE_RGMII, /**< Reduced Gigabit Media-Independent Interface (RGMII) */
-    CY_ECM_SPEED_TYPE_RMII   /**< Reduced Media-Independent Interface (RMII) */
+    CY_ECM_SPEED_TYPE_RGMII  /**< Reduced Gigabit Media-Independent Interface (RGMII) */
 } cy_ecm_speed_type_t;
 
 /** Filter type */
@@ -155,6 +156,60 @@ typedef void* cy_ecm_t;
 
 typedef uint8_t cy_ecm_mac_t[CY_ECM_MAC_ADDR_LEN];                   /**< Unique 6-byte MAC address represented in network byte order */
 
+/**
+ * ECM PHY Init callback function pointer type. Callback functions are invoked when the ECM needs to call PHY Ethernet driver API's during driver initialization.
+ * Note: The callback function will be executed in the context of the ECM.
+ */
+typedef cy_rslt_t (*cy_ecm_phy_init)(uint8_t eth_idx, ETH_Type *reg_base);
+
+/**
+ * ECM PHY Configure callback function pointer type.
+ * Note: The callback function will be executed in the context of the ECM.
+ */
+typedef cy_rslt_t (*cy_ecm_phy_configure)(uint8_t eth_idx, uint32_t duplex, uint32_t speed);
+
+/**
+ * ECM PHY Reset callback function pointer type.
+ * Note: The callback function will be executed in the context of the ECM.
+ */
+typedef cy_rslt_t (*cy_ecm_phy_reset)(uint8_t eth_idx, ETH_Type *reg_base);
+
+/**
+ * ECM PHY Discover callback function pointer type.
+ * Note: The callback function will be executed in the context of the ECM.
+ */
+typedef cy_rslt_t (*cy_ecm_phy_discover)(uint8_t eth_idx);
+
+/**
+ * ECM PHY enable extended Register callback function pointer type.
+ * Note: The callback function will be executed in the context of the ECM.
+ */
+typedef cy_rslt_t (*cy_ecm_phy_enable_ext_reg)(ETH_Type *reg_base, uint32_t speed);
+
+/**
+ * ECM PHY Get Link speed callback function pointer type.
+ * Note: The callback function will be executed in the context of the ECM.
+ */
+typedef cy_rslt_t (*cy_ecm_phy_get_linkspeed)(uint8_t eth_idx, uint32_t *duplex, uint32_t *speed);
+
+/**
+ * ECM PHY Get Link speed status function pointer type.
+ * Note: The callback function will be executed in the context of the ECM.
+ */
+typedef cy_rslt_t (*cy_ecm_phy_get_linkstatus)(uint8_t eth_idx, uint32_t *link_status);
+
+/**
+ * ECM PHY Get Auto Negotiation callback function pointer type.
+ * Note: The callback function will be executed in the context of the ECM.
+ */
+typedef cy_rslt_t (*cy_ecm_phy_get_auto_neg_status)(uint8_t eth_idx, uint32_t *neg_status);
+
+/**
+ * ECM PHY Get link partner capabilities callback function pointer type.
+ * Note: The callback function will be executed in the context of the ECM.
+ */
+typedef cy_rslt_t (*cy_ecm_phy_get_link_partner_cap)(uint8_t eth_idx, uint32_t *duplex, uint32_t *speed);
+
 /** \} group_ecm_typedefs */
 
 /**
@@ -166,6 +221,7 @@ typedef uint8_t cy_ecm_mac_t[CY_ECM_MAC_ADDR_LEN];                   /**< Unique
  *             Structures
  ******************************************************/
 
+/****************************************************************************************************************/
 /**
  * Structure used to set or receive the IP address information to or from the underlying network stack
  */
@@ -208,6 +264,22 @@ typedef struct
     uint8_t              filter_addr[CY_ECM_MAC_ADDR_LEN]; /**< Address to be filtered */
     uint8_t              ignoreBytes;                      /**< For example,  ignoreBytes = 0x01 implies that the first byte received should not be compared. ignoreBytes = 0x03 implies that the first and second bytes received should not be compared. */
 } cy_ecm_filter_address_t;
+
+/**
+ * Structure used to pass the callback function implementation for PHY related operations
+ */
+typedef struct cy_ecm_phy_callbacks
+{
+    cy_ecm_phy_init phy_init;                                   /**< Function pointer for Ethernet PHY Init.  */
+    cy_ecm_phy_configure phy_configure;                         /**< Function pointer for Ethernet PHY Configure.  */
+    cy_ecm_phy_reset phy_reset;                                 /**< Function pointer for Ethernet PHY Reset.  */
+    cy_ecm_phy_discover phy_discover;                           /**< Function pointer for Ethernet PHY discover.  */
+    cy_ecm_phy_enable_ext_reg phy_enable_ext_reg;               /**< Function pointer for Ethernet PHY enable extended registers.  */
+    cy_ecm_phy_get_linkspeed phy_get_linkspeed;                 /**< Function pointer for Ethernet PHY get link speed.  */
+    cy_ecm_phy_get_linkstatus phy_get_linkstatus;               /**< Function pointer for Ethernet PHY get link status.  */
+    cy_ecm_phy_get_auto_neg_status phy_get_auto_neg_status;     /**< Function pointer for Ethernet PHY get auto negotiation status.  */
+    cy_ecm_phy_get_link_partner_cap phy_get_link_partner_cap;   /**< Function pointer for Ethernet PHY get link partner capabilities.  */
+} cy_ecm_phy_callbacks_t;
 
 /** \} group_ecm_structures */
 
@@ -283,14 +355,12 @@ cy_rslt_t cy_ecm_deinit( void );
  * The handle to the ECM instance is returned via the handle pointer supplied by the user on success.
  *
  * \note
- * 1. Ethernet Connection Manager library sets default configurations as part of this API if ecm_phy_config is NULL.
- * 2. Default Ethernet configurations : phy_speed = CY_ECM_PHY_SPEED_1000M; interface_speed_type = CY_ECM_SPEED_TYPE_RGMII; mode = CY_ECM_DUPLEX_FULL.
- * 3. As a part of \ref cy_ecm_ethif_init, Ethernet driver initialization is called, which does GPIO and clock divider settings for the given physical configurations. But, Ethernet driver deinitialization is not available to clear these clock and GPIO settings.Hence, \ref cy_ecm_ethif_init cannot be called more than once in a single session, with different physical configurations.
- * 4. If either speed or duplex mode is set to AUTO, the auto-negotiation will be enabled. Application can call \ref cy_ecm_get_link_speed, to check the speed and duplex mode configured.
+ * 1. Ethernet Connection Manager library returns error as required ethernet phy driver callbacks functions were not passed with this API.
+ * 2. As a part of \ref cy_ecm_ethif_init, Ethernet driver initialization is called, which does GPIO and clock divider settings for the given physical configurations. But, Ethernet driver deinitialization is not available to clear these clock and GPIO settings.Hence, \ref cy_ecm_ethif_init cannot be called more than once in a single session, with different physical configurations.
+ * 3. If either speed or duplex mode is set to AUTO, the auto-negotiation will be enabled. Application can call \ref cy_ecm_get_link_speed, to check the speed and duplex mode configured.
  *
  * @param[in]  eth_idx        : Ethernet port to be initialized
- * @param[in]  mac_addr       : MAC address to be set to the device. If NULL, the default MAC address will be set.
- * @param[in]  ecm_phy_config : Structure containing the Ethernet physical configurations to enable.
+ * @param[in]  phy_callbacks  : Structure containing the Ethernet physical driver callback implementation for required ethernet PHY chip.
  * @param[out] ecm_handle     : Pointer to store the ECM handle allocated by this function on a successful return.
  *                              Caller should not free the handle directly. You should invoke \ref cy_ecm_ethif_deinit to free the handle.
  *
@@ -302,7 +372,9 @@ cy_rslt_t cy_ecm_deinit( void );
  *             \ref CY_RSLT_ECM_ERROR_NOMEM \n
  *             \ref CY_RSLT_ECM_INIT_ERROR
  */
-cy_rslt_t cy_ecm_ethif_init(cy_ecm_interface_t eth_idx, cy_ecm_mac_t *mac_addr, cy_ecm_phy_config_t *ecm_phy_config, cy_ecm_t *ecm_handle);
+cy_rslt_t cy_ecm_ethif_init(cy_ecm_interface_t eth_idx,
+                            cy_ecm_phy_callbacks_t *phy_callbacks,
+                            cy_ecm_t *ecm_handle);
 
 /**
  * Enable or Disable the promiscuous mode.

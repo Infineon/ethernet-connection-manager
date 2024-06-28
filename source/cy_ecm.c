@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -56,6 +56,7 @@
 #include "cy_sysint.h"
 
 #include "cy_log.h"
+
 /******************************************************
  *                      Macros
  ******************************************************/
@@ -101,11 +102,11 @@ typedef struct ecm_object
     cy_ecm_interface_t            eth_idx;
     ETH_Type                     *eth_base_type;
     cy_network_interface_context *iface_context;
+    cy_ecm_phy_callbacks_t        eth_phy_cb;
     void*                         user_data;            /* Argument to be passed back to the user while invoking the callback */
     bool                          isobjinitialized;     /* Indicates that the ECM object is initialized      */
     cy_mutex_t                    obj_mutex;            /* Mutex to serialize object access in multi-threading mode  */
     bool                          network_up;
-    cy_stc_ephy_t                 phy_obj;
     uint8_t                       mac_address[CY_ECM_MAC_ADDR_LEN];
 } cy_ecm_object_t;
 
@@ -125,14 +126,12 @@ static bool                    is_ethernet_initiated[CY_ECM_ETH_INTERFACE_MAX] =
 /* PHY up/down status*/
 static bool                    is_ethernet_link_up[CY_ECM_ETH_INTERFACE_MAX] = {0};
 
-cy_stc_ephy_t *eth_obj[CY_ECM_ETH_INTERFACE_MAX] = {NULL};
+/* ECM event thread create status */
+static uint8_t                 is_ecm_thread_created = 0;
+
 /******************************************************
  *                 Static functions
  ******************************************************/
-extern void phyRead(uint32_t phyId, uint32_t regAddress, uint32_t *value);
-extern void phyWrite(uint32_t phyId, uint32_t regAddress, uint32_t value);
-
-/********************************************************/
 static void invoke_app_callbacks( cy_ecm_event_t event_type, cy_ecm_event_data_t* arg )
 {
     int i = 0;
@@ -168,7 +167,9 @@ static void ip_change_callback( cy_network_interface_context *iface_context, voi
 
 static void ecm_event_thread_func( cy_thread_arg_t arg )
 {
-    (void)arg;
+    cy_rslt_t result = CY_RSLT_SUCCESS;
+    uint32_t linkstatus =0;
+    cy_ecm_phy_callbacks_t *phy_cb = (cy_ecm_phy_callbacks_t *)arg;
 
     cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "%s(): START \n", __FUNCTION__ );
 
@@ -176,51 +177,58 @@ static void ecm_event_thread_func( cy_thread_arg_t arg )
     {
         if( is_ethernet_initiated[CY_ECM_INTERFACE_ETH0] == true )
         {
-            if( Cy_EPHY_GetLinkStatus( eth_obj[CY_ECM_INTERFACE_ETH0] ) == 1UL )
+            // Read from the ETH0 register set
+            result = phy_cb->phy_get_linkstatus((uint8_t)CY_ECM_INTERFACE_ETH0, &linkstatus);
+            if(result == CY_RSLT_SUCCESS)
             {
-                if( is_ethernet_link_up[CY_ECM_INTERFACE_ETH0] == false )
+                if(linkstatus == 1)
                 {
-                    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "get Link status : UP \n" );
-                    is_ethernet_link_up[CY_ECM_INTERFACE_ETH0] = true;
+                    if( is_ethernet_link_up[CY_ECM_INTERFACE_ETH0] == false )
+                    {
+                        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "get Link status : UP \n" );
+                        is_ethernet_link_up[CY_ECM_INTERFACE_ETH0] = true;
 
-                    /*Call the application callback function*/
-                    invoke_app_callbacks( CY_ECM_EVENT_CONNECTED, NULL );
+                        /*Call the application callback function*/
+                        invoke_app_callbacks( CY_ECM_EVENT_CONNECTED, NULL );
+                    }
                 }
-            }
-            else
-            {
-                if( is_ethernet_link_up[CY_ECM_INTERFACE_ETH0] == true )
+                else
                 {
-                    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "get Link status : DOWN \n" );
-                    is_ethernet_link_up[CY_ECM_INTERFACE_ETH0] = false;
-                    /*Call the application callback function*/
-                    invoke_app_callbacks( CY_ECM_EVENT_DISCONNECTED, NULL );
+                    if( is_ethernet_link_up[CY_ECM_INTERFACE_ETH0] == true )
+                    {
+                        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "get Link status : DOWN \n" );
+                        is_ethernet_link_up[CY_ECM_INTERFACE_ETH0] = false;
+                        /*Call the application callback function*/
+                        invoke_app_callbacks( CY_ECM_EVENT_DISCONNECTED, NULL );
+                    }
                 }
             }
         }
         else if( is_ethernet_initiated[CY_ECM_INTERFACE_ETH1] == true )
         {
-            //Read from the ETH0 register set
-            if( Cy_EPHY_GetLinkStatus( eth_obj[CY_ECM_INTERFACE_ETH1] ) == 1UL )
+            //Read from the ETH1 register set
+            result = phy_cb->phy_get_linkstatus((uint8_t)CY_ECM_INTERFACE_ETH1, &linkstatus);
+            if(result == CY_RSLT_SUCCESS)
             {
-                if( is_ethernet_link_up[CY_ECM_INTERFACE_ETH1] == false )
+                if(linkstatus == 1)
                 {
-                    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "get Link status : UP \n" );
-                    is_ethernet_link_up[CY_ECM_INTERFACE_ETH1] = true;
-                    /*Call the application callback function*/
-                    invoke_app_callbacks( CY_ECM_EVENT_CONNECTED, NULL );
+                    if( is_ethernet_link_up[CY_ECM_INTERFACE_ETH1] == false )
+                    {
+                        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "get Link status : UP \n" );
+                        is_ethernet_link_up[CY_ECM_INTERFACE_ETH1] = true;
+                        /*Call the application callback function*/
+                        invoke_app_callbacks( CY_ECM_EVENT_CONNECTED, NULL );
+                    }
                 }
-            }
-            else
-            {
-                if( is_ethernet_link_up[CY_ECM_INTERFACE_ETH1] == true )
+                else
                 {
-                    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "get Link status : DOWN \n" );
-                    is_ethernet_link_up[CY_ECM_INTERFACE_ETH1] = false;
-
-                    /*Call the application callback function*/
-                    invoke_app_callbacks( CY_ECM_EVENT_DISCONNECTED, NULL );
-
+                    if( is_ethernet_link_up[CY_ECM_INTERFACE_ETH1] == true )
+                    {
+                        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "get Link status : DOWN \n" );
+                        is_ethernet_link_up[CY_ECM_INTERFACE_ETH1] = false;
+                        /*Call the application callback function*/
+                        invoke_app_callbacks( CY_ECM_EVENT_DISCONNECTED, NULL );
+                    }
                 }
             }
         }
@@ -260,18 +268,6 @@ cy_rslt_t cy_ecm_init( void )
         goto exit;
     }
 
-    /* Create the thread to handle connect/disconnect events */
-     result = cy_rtos_create_thread( &ecm_event_thread, ecm_event_thread_func, "ECMEventThread", NULL,
-                                     CY_ECM_EVENT_THREAD_STACK_SIZE, CY_ECM_EVENT_THREAD_PRIORITY, NULL );
-     if( result != CY_RSLT_SUCCESS )
-     {
-         cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\ncy_rtos_create_thread failed with Error : [0x%X]\n", (unsigned int)result );
-         is_tcp_initialized = false;
-         cy_rtos_deinit_mutex( &ecm_mutex );
-         result = CY_RSLT_ECM_ERROR;
-         goto exit;
-     }
-
      is_ecm_initialized = true;
 
     cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "%s(): END \n", __FUNCTION__ );
@@ -304,27 +300,6 @@ cy_rslt_t cy_ecm_deinit( void )
 
         is_tcp_initialized = false;
 
-        /* Terminate the connect/disconnect event thread */
-        if( ecm_event_thread != NULL )
-        {
-            cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "\nTerminating ECM event thread %p..!\n", ecm_event_thread );
-            result = cy_rtos_terminate_thread( &ecm_event_thread );
-            if( result != CY_RSLT_SUCCESS )
-            {
-                cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\nTerminate ECM event thread failed with Error : [0x%X] ", (unsigned int)result );
-                /* Fall-through. It's intentional. */
-            }
-
-            cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "\nJoining ECM event thread %p..!\n", ecm_event_thread );
-            result = cy_rtos_join_thread( &ecm_event_thread );
-            if( result != CY_RSLT_SUCCESS )
-            {
-                cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\nJoin ECM event thread failed with Error : [0x%X] ", (unsigned int)result );
-                /* Fall-through. It's intentional. */
-            }
-            ecm_event_thread = NULL;
-        }
-
         (void)cy_network_deinit(); /* Fall through */
         cy_rtos_deinit_mutex( &ecm_mutex );
         cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "Global Mutex Deinit..!\n" );
@@ -335,7 +310,9 @@ cy_rslt_t cy_ecm_deinit( void )
     return result;
 }
 
-cy_rslt_t cy_ecm_ethif_init( cy_ecm_interface_t eth_idx, cy_ecm_mac_t *usr_mac_addr, cy_ecm_phy_config_t *ecm_phy_config, cy_ecm_t *ecm_handle )
+cy_rslt_t cy_ecm_ethif_init( cy_ecm_interface_t eth_idx,
+                             cy_ecm_phy_callbacks_t *phy_callbacks,
+                             cy_ecm_t *ecm_handle )
 {
     cy_rslt_t                     result = CY_RSLT_SUCCESS;
     cy_ecm_object_t              *ecm_obj       = NULL;
@@ -348,6 +325,41 @@ cy_rslt_t cy_ecm_ethif_init( cy_ecm_interface_t eth_idx, cy_ecm_mac_t *usr_mac_a
     {
         cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\n Invalid arguments passed \n" );
         return CY_RSLT_MODULE_ECM_BADARG;
+    }
+
+    if( eth_idx == CY_ECM_INTERFACE_ETH1 )
+    {
+#if !(defined (eth_1_ENABLED) && (eth_1_ENABLED == 1u))
+        return CY_RSLT_MODULE_ECM_BADARG;
+#else
+        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "\n Ethernet interface 1 is enabled in configurator \n" );
+#endif
+    }
+    else
+    {
+#if !(defined (eth_0_ENABLED) && (eth_0_ENABLED == 1u))
+        return CY_RSLT_MODULE_ECM_BADARG;
+#else
+        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "\n Ethernet interface 0 is enabled in configurator \n" );
+#endif
+    }
+
+    if( phy_callbacks == NULL )
+    {
+        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\n Invalid arguments passed \n" );
+        return CY_RSLT_MODULE_ECM_BADARG;
+    }
+    else
+    {
+        if( (phy_callbacks->phy_init == NULL) || (phy_callbacks->phy_configure == NULL) ||
+            (phy_callbacks->phy_discover == NULL) || (phy_callbacks->phy_enable_ext_reg == NULL) ||
+            (phy_callbacks->phy_get_auto_neg_status == NULL) || (phy_callbacks->phy_get_link_partner_cap == NULL) ||
+            (phy_callbacks->phy_get_linkspeed == NULL) || (phy_callbacks->phy_get_linkstatus == NULL) ||
+            (phy_callbacks->phy_reset == NULL) )
+        {
+            cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\n Invalid arguments passed \n" );
+            return CY_RSLT_MODULE_ECM_BADARG;
+        }
     }
 
     if( !is_ecm_initialized )
@@ -397,65 +409,125 @@ cy_rslt_t cy_ecm_ethif_init( cy_ecm_interface_t eth_idx, cy_ecm_mac_t *usr_mac_a
     ecm_obj->isobjinitialized = true;
     ecm_obj->eth_idx = eth_idx;
     ecm_obj->eth_base_type = ETH_INTERFACE_TYPE;
-
     ecm_obj->network_up = false;
-
     ecm_obj->iface_context = NULL;
+
+    /* Callbacks */
+    ecm_obj->eth_phy_cb.phy_init = phy_callbacks->phy_init;
+    ecm_obj->eth_phy_cb.phy_configure = phy_callbacks->phy_configure;
+    ecm_obj->eth_phy_cb.phy_reset = phy_callbacks->phy_reset;
+    ecm_obj->eth_phy_cb.phy_discover = phy_callbacks->phy_discover;
+    ecm_obj->eth_phy_cb.phy_enable_ext_reg = phy_callbacks->phy_enable_ext_reg;
+    ecm_obj->eth_phy_cb.phy_get_auto_neg_status = phy_callbacks->phy_get_auto_neg_status;
+    ecm_obj->eth_phy_cb.phy_get_link_partner_cap = phy_callbacks->phy_get_link_partner_cap;
+    ecm_obj->eth_phy_cb.phy_get_linkspeed = phy_callbacks->phy_get_linkspeed;
+    ecm_obj->eth_phy_cb.phy_get_linkstatus = phy_callbacks->phy_get_linkstatus;
+
     *ecm_handle = (cy_ecm_t *)ecm_obj;
 
-    if( usr_mac_addr == NULL )
+    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "Assigning User MAC address...\n" );
+    if(eth_idx == CY_ECM_INTERFACE_ETH1)
     {
-        ecm_obj->mac_address[0] = (uint8_t)MAC_ADDR0;
-        ecm_obj->mac_address[1] = (uint8_t)MAC_ADDR1;
-        ecm_obj->mac_address[2] = (uint8_t)MAC_ADDR2;
-        ecm_obj->mac_address[3] = (uint8_t)MAC_ADDR3;
-        ecm_obj->mac_address[4] = (uint8_t)MAC_ADDR4;
-        ecm_obj->mac_address[5] = (uint8_t)MAC_ADDR5;
-        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "User MAC address is NULL, assigning default MAC address\n" );
+#if (defined (eth_1_ENABLED) && (eth_1_ENABLED == 1u))
+        ecm_obj->mac_address[0] = (uint8_t)eth_1_MAC_ADDR0;
+        ecm_obj->mac_address[1] = (uint8_t)eth_1_MAC_ADDR1;
+        ecm_obj->mac_address[2] = (uint8_t)eth_1_MAC_ADDR2;
+        ecm_obj->mac_address[3] = (uint8_t)eth_1_MAC_ADDR3;
+        ecm_obj->mac_address[4] = (uint8_t)eth_1_MAC_ADDR4;
+        ecm_obj->mac_address[5] = (uint8_t)eth_1_MAC_ADDR5;
+#endif
+    }
+
+    if(eth_idx == CY_ECM_INTERFACE_ETH0)
+    {
+#if (defined (eth_0_ENABLED) && (eth_0_ENABLED == 1u))
+        ecm_obj->mac_address[0] = (uint8_t)eth_0_MAC_ADDR0;
+        ecm_obj->mac_address[1] = (uint8_t)eth_0_MAC_ADDR1;
+        ecm_obj->mac_address[2] = (uint8_t)eth_0_MAC_ADDR2;
+        ecm_obj->mac_address[3] = (uint8_t)eth_0_MAC_ADDR3;
+        ecm_obj->mac_address[4] = (uint8_t)eth_0_MAC_ADDR4;
+        ecm_obj->mac_address[5] = (uint8_t)eth_0_MAC_ADDR5;
+#endif
+    }
+
+    if(eth_idx == CY_ECM_INTERFACE_ETH0)
+    {
+#if (defined (eth_0_ENABLED) && (eth_0_ENABLED == 1u))
+        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "Initializing ETH0 interface PHY properties...\n" );
+        phy_interface_type.interface_speed_type = (cy_ecm_speed_type_t)eth_0_PHY_INTERFACE;
+        phy_interface_type.phy_speed = (cy_ecm_phy_speed_t)eth_0_PHY_SPEED;
+        phy_interface_type.mode = (cy_ecm_duplex_t)eth_0_PHY_MODE;
+#endif
     }
     else
     {
-        /* Update the MAC address to the ECM object */
-        memcpy( (uint8_t *)&( ecm_obj->mac_address[0] ), (uint8_t *)&( usr_mac_addr[0] ), CY_ECM_MAC_ADDR_LEN );
-        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "Assigning User MAC address to the interface\n" );
+#if (defined (eth_1_ENABLED) && (eth_1_ENABLED == 1u))
+        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "Initializing ETH1 interface PHY properties...\n" );
+        phy_interface_type.interface_speed_type = (cy_ecm_speed_type_t)eth_1_PHY_INTERFACE;
+        phy_interface_type.phy_speed = (cy_ecm_phy_speed_t)eth_1_PHY_SPEED;
+        phy_interface_type.mode = (cy_ecm_duplex_t)eth_1_PHY_MODE;
+#endif
     }
 
-    if( ecm_phy_config == NULL )
-    {
-        phy_interface_type.interface_speed_type = CY_ECM_SPEED_TYPE_RGMII;
-        phy_interface_type.phy_speed = CY_ECM_PHY_SPEED_1000M;
-        phy_interface_type.mode = CY_ECM_DUPLEX_FULL;
-    }
-    else
-    {
-        /* Return error if an invalid configuration is sent */
-        if( ( ecm_phy_config->interface_speed_type == CY_ECM_SPEED_TYPE_MII && ecm_phy_config->phy_speed == CY_ECM_PHY_SPEED_1000M ) ||
-            ( ecm_phy_config->interface_speed_type == CY_ECM_SPEED_TYPE_GMII && ( ecm_phy_config->phy_speed == CY_ECM_PHY_SPEED_10M || ecm_phy_config->phy_speed == CY_ECM_PHY_SPEED_100M ) ) ||
-            ( ecm_phy_config->interface_speed_type == CY_ECM_SPEED_TYPE_RMII && ecm_phy_config->phy_speed == CY_ECM_PHY_SPEED_1000M )
-          )
-        {
-            cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\n Invalid arguments passed for ethernet physical configurations \n" );
-            result = CY_RSLT_MODULE_ECM_BADARG;
-            goto exit;
-        }
+    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "PHY interface type  : %d \n", (int)phy_interface_type.interface_speed_type );
+    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "PHY interface speed : %d \n", (int)phy_interface_type.phy_speed );
+    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "PHY interface mode  : %d \n", (int)phy_interface_type.mode );
 
-        phy_interface_type.interface_speed_type = ecm_phy_config->interface_speed_type;
-        phy_interface_type.phy_speed = ecm_phy_config->phy_speed;
-        phy_interface_type.mode = ecm_phy_config->mode;
-    }
+    /* Prevent system to enter into deep sleep during ethernet initialization */
+    cyhal_syspm_lock_deepsleep();
 
-    /* Store the pointer of the Ethernet driver object. This will be used to check the link status periodically in the thread handler. */
-    eth_obj[ecm_obj->eth_idx] = &( ecm_obj->phy_obj );
-
-    result = cy_eth_driver_initialization( ecm_obj->eth_base_type, &phy_interface_type, &( ecm_obj->phy_obj ) );
+    result = cy_eth_driver_initialization( ecm_obj->eth_idx, ecm_obj->eth_base_type, &phy_interface_type, &(ecm_obj->eth_phy_cb) );
     if( result != CY_RSLT_SUCCESS )
     {
         cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "ECM driver initialization failed with result = 0x%X\n", (unsigned long)result );
+        /* Unlock to enter into deep sleep */
+        cyhal_syspm_unlock_deepsleep();
         result = CY_RSLT_ECM_ERROR;
         goto exit;
     }
 
+    /* Enable/Disable Promiscuous Mode */
+#if (defined (eth_0_ENABLED) && (eth_0_ENABLED == 1u))
+#if (eth_0_PROMISCUOUS_MODE == true)
+    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "Setting Promiscuous Mode for ETH0 interface...\n" );
+    Cy_ETHIF_SetPromiscuousMode( ecm_obj->eth_base_type, true );
+#endif
+#if (eth_0_ACCEPT_BROADCASR_FRAMES == false)
+    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "Setting No BroadCast for ETH0 interface...\n" );
+    Cy_ETHIF_SetNoBroadCast( ecm_obj->eth_base_type, true );
+#endif
+#endif
+
+#if (defined (eth_1_ENABLED) && (eth_1_ENABLED == 1u))
+#if (eth_1_PROMISCUOUS_MODE == true)
+    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "Setting Promiscuous Mode for ETH1 interface...\n" );
+    Cy_ETHIF_SetPromiscuousMode( ecm_obj->eth_base_type, true );
+#endif
+#if (eth_1_ACCEPT_BROADCASR_FRAMES == false)
+    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "Setting No BroadCast for ETH1 interface...\n" );
+    Cy_ETHIF_SetNoBroadCast( ecm_obj->eth_base_type, true );
+#endif
+#endif
+
     is_ethernet_initiated[ecm_obj->eth_idx] = true;
+
+    /* Unlock to enter into deep sleep */
+    cyhal_syspm_unlock_deepsleep();
+
+    if(is_ecm_thread_created == 0)
+    {
+        /* Create the thread to handle connect/disconnect events */
+         result = cy_rtos_create_thread( &ecm_event_thread, ecm_event_thread_func, "ECMEventThread", NULL,
+                                         CY_ECM_EVENT_THREAD_STACK_SIZE, CY_ECM_EVENT_THREAD_PRIORITY, (cy_thread_arg_t)(&(ecm_obj->eth_phy_cb)) );
+         if( result != CY_RSLT_SUCCESS )
+         {
+             cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\ncy_rtos_create_thread failed with Error : [0x%X]\n", (unsigned int)result );
+             result = CY_RSLT_ECM_ERROR;
+             goto exit;
+         }
+    }
+
+    is_ecm_thread_created++;
 
     result = cy_rtos_set_mutex( &ecm_mutex );
     if( result != CY_RSLT_SUCCESS )
@@ -522,6 +594,32 @@ cy_rslt_t cy_ecm_ethif_deinit( cy_ecm_t *ecm_handle )
         return CY_RSLT_ECM_MUTEX_ERROR;
     }
 
+    is_ecm_thread_created--;
+
+    /* Terminate the connect/disconnect event thread */
+    if( is_ecm_thread_created == 0 )
+    {
+        if( ecm_event_thread != NULL )
+        {
+            cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "\nTerminating ECM event thread %p..!\n", ecm_event_thread );
+            result = cy_rtos_terminate_thread( &ecm_event_thread );
+            if( result != CY_RSLT_SUCCESS )
+            {
+                cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\nTerminate ECM event thread failed with Error : [0x%X] ", (unsigned int)result );
+                /* Fall-through. It's intentional. */
+            }
+
+            cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "\nJoining ECM event thread %p..!\n", ecm_event_thread );
+            result = cy_rtos_join_thread( &ecm_event_thread );
+            if( result != CY_RSLT_SUCCESS )
+            {
+                cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\nJoin ECM event thread failed with Error : [0x%X] ", (unsigned int)result );
+                /* Fall-through. It's intentional. */
+            }
+            ecm_event_thread = NULL;
+        }
+    }
+
     if( cy_rtos_deinit_mutex( &( ecm_obj->obj_mutex ) ) != CY_RSLT_SUCCESS )
     {
         cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "Mutex deinit failed with result = 0x%X\n", (unsigned long)result );
@@ -531,7 +629,6 @@ cy_rslt_t cy_ecm_ethif_deinit( cy_ecm_t *ecm_handle )
 
     deregister_cb(ecm_obj->eth_base_type);
 
-    eth_obj[ecm_obj->eth_idx] = NULL;
     is_ethernet_initiated[ecm_obj->eth_idx] = false;
     ecm_obj->iface_context = NULL;
 
@@ -762,7 +859,7 @@ cy_rslt_t cy_ecm_connect( cy_ecm_t ecm_handle, cy_ecm_ip_setting_t *ecm_static_i
     cy_ecm_object_t *ecm_obj;
     cy_network_static_ip_addr_t nw_static_ipaddr, *static_ipaddr = NULL;
     cy_nw_ip_address_t ipv4_addr;
-    uint32_t total_wait_time = 0;
+    uint32_t total_wait_time = 0, linkstatus = 0;
 #ifdef ENABLE_ECM_LOGS
     char ip_str[15];
 #endif
@@ -843,10 +940,13 @@ cy_rslt_t cy_ecm_connect( cy_ecm_t ecm_handle, cy_ecm_ip_setting_t *ecm_static_i
         cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "Waiting for Link up... \n" );
         while( total_wait_time < MAX_WAIT_ETHERNET_PHY_STATUS )
         {
-            if( Cy_EPHY_GetLinkStatus( &( ecm_obj->phy_obj ) ) == 1UL )
+            result = ecm_obj->eth_phy_cb.phy_get_linkstatus((uint8_t)ecm_obj->eth_idx, &linkstatus);
+            if(result == CY_RSLT_SUCCESS)
             {
-                result = CY_RSLT_SUCCESS;
-                break;
+                if(linkstatus == 1)
+                {
+                    break;
+                }
             }
             cy_rtos_delay_milliseconds(WAIT_CHECK_ETHERNET_PHY_STATUS);
             total_wait_time += WAIT_CHECK_ETHERNET_PHY_STATUS;
@@ -1126,7 +1226,7 @@ cy_rslt_t cy_ecm_get_link_status( cy_ecm_t ecm_handle, bool *status )
 {
     cy_rslt_t result = CY_RSLT_SUCCESS;
     cy_ecm_object_t *ecm_obj;
-    uint32_t total_wait_time = 0;
+    uint32_t total_wait_time = 0, linkstatus = 0;
 
     cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "%s(): START \n", __FUNCTION__ );
 
@@ -1155,11 +1255,14 @@ cy_rslt_t cy_ecm_get_link_status( cy_ecm_t ecm_handle, bool *status )
 
     while( total_wait_time < (uint32_t )MAX_WAIT_ETHERNET_PHY_STATUS )
     {
-        if( Cy_EPHY_GetLinkStatus( &( ecm_obj->phy_obj ) ) == 1UL )
+        result = ecm_obj->eth_phy_cb.phy_get_linkstatus((uint8_t)ecm_obj->eth_idx, &linkstatus);
+        if(result == CY_RSLT_SUCCESS)
         {
-            result = CY_RSLT_SUCCESS;
-            *status = 1;
-            break;
+            if(linkstatus == 1)
+            {
+                *status = true;
+                break;
+            }
         }
         cy_rtos_delay_milliseconds( WAIT_CHECK_ETHERNET_PHY_STATUS );
         total_wait_time += WAIT_CHECK_ETHERNET_PHY_STATUS;
@@ -1169,7 +1272,7 @@ cy_rslt_t cy_ecm_get_link_status( cy_ecm_t ecm_handle, bool *status )
     if( total_wait_time >= MAX_WAIT_ETHERNET_PHY_STATUS )
     {
         result = CY_RSLT_SUCCESS;
-        *status = 0;
+        *status = false;
     }
     cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "\n After reading link status = %d \n",*status );
 
@@ -1616,9 +1719,8 @@ cy_rslt_t cy_ecm_get_link_speed( cy_ecm_t ecm_handle, cy_ecm_duplex_t *duplex, c
 {
     cy_rslt_t        result = CY_RSLT_SUCCESS;
     cy_ecm_object_t *ecm_obj;
-    uint32_t         value = 0;
     uint32_t         total_wait_time = 0;
-    uint16_t         speed_selection;
+    uint32_t         mode = 0, phy_speed = 0, link_status = 0;
 
     cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "%s(): START \n", __FUNCTION__ );
 
@@ -1647,28 +1749,21 @@ cy_rslt_t cy_ecm_get_link_speed( cy_ecm_t ecm_handle, cy_ecm_duplex_t *duplex, c
     /* Check whether the link is up*/
     while( total_wait_time < (uint32_t )MAX_WAIT_ETHERNET_PHY_STATUS )
     {
-        if( Cy_EPHY_GetLinkStatus(&(ecm_obj->phy_obj)) == 1UL )
+        result = ecm_obj->eth_phy_cb.phy_get_linkstatus((uint8_t)ecm_obj->eth_idx, &link_status);
+        if(result == CY_RSLT_SUCCESS)
         {
-            /* Read the Link Status register */
-            phyRead( 0, REGISTER_ADDRESS_PHY_REG_BMCR, &value );
-            cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "REGISTER_ADDRESS_PHY_REG_BMCR = 0x%X\n", (unsigned long)value );
-            *duplex = ((value & (REGISTER_PHY_REG_DUPLEX_MASK)) == 0) ? CY_ECM_DUPLEX_HALF : CY_ECM_DUPLEX_FULL;
-            speed_selection = value & (REGISTER_PHY_REG_SPEED_MASK);
-            if(speed_selection == REGISTER_PHY_REG_SPEED_MASK_10M)
+            if(link_status == true)
             {
-                *speed = CY_ECM_PHY_SPEED_10M;
+                result = ecm_obj->eth_phy_cb.phy_get_linkspeed((uint8_t)ecm_obj->eth_idx, &mode, &phy_speed);
+                if(result == CY_RSLT_SUCCESS)
+                {
+                    *duplex = (cy_ecm_duplex_t)mode;
+                    *speed = (cy_ecm_phy_speed_t)phy_speed;
+                    goto exit;
+                }
             }
-            else if (speed_selection == REGISTER_PHY_REG_SPEED_MASK_100M)
-            {
-                *speed = CY_ECM_PHY_SPEED_100M;
-            }
-            else if(speed_selection == REGISTER_PHY_REG_SPEED_MASK_1000M)
-            {
-                *speed = CY_ECM_PHY_SPEED_1000M;
-            }
-            result = CY_RSLT_SUCCESS;
-            goto exit;
         }
+
         cy_rtos_delay_milliseconds( WAIT_CHECK_ETHERNET_PHY_STATUS );
         total_wait_time += WAIT_CHECK_ETHERNET_PHY_STATUS;
     }

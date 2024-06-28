@@ -105,9 +105,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gae0769bf40b9eb139d70573644160dca1"><td class="memItemLeft" align="right" valign="top">cy_rslt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__functions.html#gae0769bf40b9eb139d70573644160dca1">cy_ecm_deinit</a> (void)</td></tr>
 <tr class="memdesc:gae0769bf40b9eb139d70573644160dca1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases the resources allocated in the <a class="el" href="group__group__ecm__functions.html#ga9bb2ae7395196acd5304c5ad00038a6a">cy_ecm_init</a> function.  <a href="group__group__ecm__functions.html#gae0769bf40b9eb139d70573644160dca1">More...</a><br /></td></tr>
 <tr class="separator:gae0769bf40b9eb139d70573644160dca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga09e918eb95302d29400e7a359a83e4b5"><td class="memItemLeft" align="right" valign="top">cy_rslt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> (<a class="el" href="group__group__ecm__enums.html#ga590222ddd53f937ee092b018d402bd49">cy_ecm_interface_t</a> eth_idx, <a class="el" href="group__group__ecm__typedefs.html#gaad746e38751703388a8eedd9d206e741">cy_ecm_mac_t</a> *mac_addr, <a class="el" href="structcy__ecm__phy__config__t.html">cy_ecm_phy_config_t</a> *ecm_phy_config, <a class="el" href="group__group__ecm__typedefs.html#ga0bee3cc16897346fc3def995951dd645">cy_ecm_t</a> *ecm_handle)</td></tr>
-<tr class="memdesc:ga09e918eb95302d29400e7a359a83e4b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the Ethernet physical driver, enables Ethernet port, and brings up the network stack.  <a href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">More...</a><br /></td></tr>
-<tr class="separator:ga09e918eb95302d29400e7a359a83e4b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga973e5b61d5f02f419b84ce5e9a6c2380"><td class="memItemLeft" align="right" valign="top">cy_rslt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> (<a class="el" href="group__group__ecm__enums.html#ga590222ddd53f937ee092b018d402bd49">cy_ecm_interface_t</a> eth_idx, <a class="el" href="structcy__ecm__phy__callbacks__t.html">cy_ecm_phy_callbacks_t</a> *phy_callbacks, <a class="el" href="group__group__ecm__typedefs.html#ga0bee3cc16897346fc3def995951dd645">cy_ecm_t</a> *ecm_handle)</td></tr>
+<tr class="memdesc:ga973e5b61d5f02f419b84ce5e9a6c2380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the Ethernet physical driver, enables Ethernet port, and brings up the network stack.  <a href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">More...</a><br /></td></tr>
+<tr class="separator:ga973e5b61d5f02f419b84ce5e9a6c2380"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga13c35a4e6c210679a2dbeb5dee73884a"><td class="memItemLeft" align="right" valign="top">cy_rslt_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__functions.html#ga13c35a4e6c210679a2dbeb5dee73884a">cy_ecm_set_promiscuous_mode</a> (<a class="el" href="group__group__ecm__typedefs.html#ga0bee3cc16897346fc3def995951dd645">cy_ecm_t</a> ecm_handle, bool is_promiscuous_mode)</td></tr>
 <tr class="memdesc:ga13c35a4e6c210679a2dbeb5dee73884a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable or Disable the promiscuous mode.  <a href="group__group__ecm__functions.html#ga13c35a4e6c210679a2dbeb5dee73884a">More...</a><br /></td></tr>
 <tr class="separator:ga13c35a4e6c210679a2dbeb5dee73884a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -207,8 +207,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ga09e918eb95302d29400e7a359a83e4b5" name="ga09e918eb95302d29400e7a359a83e4b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga09e918eb95302d29400e7a359a83e4b5">&#9670;&nbsp;</a></span>cy_ecm_ethif_init()</h2>
+<a id="ga973e5b61d5f02f419b84ce5e9a6c2380" name="ga973e5b61d5f02f419b84ce5e9a6c2380"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga973e5b61d5f02f419b84ce5e9a6c2380">&#9670;&nbsp;</a></span>cy_ecm_ethif_init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -222,14 +222,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="group__group__ecm__typedefs.html#gaad746e38751703388a8eedd9d206e741">cy_ecm_mac_t</a> *&#160;</td>
-          <td class="paramname"><em>mac_addr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structcy__ecm__phy__config__t.html">cy_ecm_phy_config_t</a> *&#160;</td>
-          <td class="paramname"><em>ecm_phy_config</em>, </td>
+          <td class="paramtype"><a class="el" href="structcy__ecm__phy__callbacks__t.html">cy_ecm_phy_callbacks_t</a> *&#160;</td>
+          <td class="paramname"><em>phy_callbacks</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -248,17 +242,15 @@ Functions</h2></td></tr>
 <p>Initializes the Ethernet physical driver, enables Ethernet port, and brings up the network stack. </p>
 <p >This function should be called after calling <a class="el" href="group__group__ecm__functions.html#ga9bb2ae7395196acd5304c5ad00038a6a">cy_ecm_init</a>. The handle to the ECM instance is returned via the handle pointer supplied by the user on success.</p>
 <dl class="section note"><dt>Note</dt><dd><ol type="1">
-<li>Ethernet Connection Manager library sets default configurations as part of this API if ecm_phy_config is NULL.</li>
-<li>Default Ethernet configurations : phy_speed = CY_ECM_PHY_SPEED_1000M; interface_speed_type = CY_ECM_SPEED_TYPE_RGMII; mode = CY_ECM_DUPLEX_FULL.</li>
-<li>As a part of <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>, Ethernet driver initialization is called, which does GPIO and clock divider settings for the given physical configurations. But, Ethernet driver deinitialization is not available to clear these clock and GPIO settings.Hence, <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> cannot be called more than once in a single session, with different physical configurations.</li>
+<li>Ethernet Connection Manager library returns error as required ethernet phy driver callbacks functions were not passed with this API.</li>
+<li>As a part of <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>, Ethernet driver initialization is called, which does GPIO and clock divider settings for the given physical configurations. But, Ethernet driver deinitialization is not available to clear these clock and GPIO settings.Hence, <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> cannot be called more than once in a single session, with different physical configurations.</li>
 <li>If either speed or duplex mode is set to AUTO, the auto-negotiation will be enabled. Application can call <a class="el" href="group__group__ecm__functions.html#ga080c58b86b864ab849d94ad59fe61945">cy_ecm_get_link_speed</a>, to check the speed and duplex mode configured.</li>
 </ol>
 </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">eth_idx</td><td>: Ethernet port to be initialized </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mac_addr</td><td>: MAC address to be set to the device. If NULL, the default MAC address will be set. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_phy_config</td><td>: Structure containing the Ethernet physical configurations to enable. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">phy_callbacks</td><td>: Structure containing the Ethernet physical driver callback implementation for required ethernet PHY chip. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ecm_handle</td><td>: Pointer to store the ECM handle allocated by this function on a successful return. Caller should not free the handle directly. You should invoke <a class="el" href="group__group__ecm__functions.html#gaec7c87dc3f6a6b035f7902961480d7f9">cy_ecm_ethif_deinit</a> to free the handle.</td></tr>
   </table>
   </dd>
@@ -299,10 +291,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Enable or Disable the promiscuous mode. </p>
-<p >This function configures the ethernet MAC to enable or disable the promiscuous mode. By default promiscuous mode will be disabled. This function should be called after calling <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> ECM API.</p>
+<p >This function configures the ethernet MAC to enable or disable the promiscuous mode. By default promiscuous mode will be disabled. This function should be called after calling <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> ECM API.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">is_promiscuous_mode</td><td>: true enables promiscuous mode, if false then this is disabled.</td></tr>
   </table>
   </dd>
@@ -341,10 +333,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Enable or Disable the incoming broadcast packets. </p>
-<p >This function configures the ethernet MAC to enable or disable the incoming broadcast packets. By default broadcast packets are accepted. This function should be called after calling <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> ECM API.</p>
+<p >This function configures the ethernet MAC to enable or disable the incoming broadcast packets. By default broadcast packets are accepted. This function should be called after calling <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> ECM API.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">is_broadcast_disable</td><td>: false broadcasts are accepted, if true they are rejected.</td></tr>
   </table>
   </dd>
@@ -389,10 +381,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Filter the receiving packets with the configured source or destination filter address. </p>
-<p >This function configures the filter address to the ethernet MAC to filter the receiving packets. This function should be called after calling <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> ECM API.</p>
+<p >This function configures the filter address to the ethernet MAC to filter the receiving packets. This function should be called after calling <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> ECM API.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">filter_address</td><td>: Array containing list of address to be filtered. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">filter_address_count</td><td>: Total count of addresses to be filtered. Maximum supported is CY_ECM_MAX_FILTER_ADDRESS.</td></tr>
   </table>
@@ -439,10 +431,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Brings up the interface and configure to corresponding Ethernet port. </p>
-<p >This function brings up the network interface. This function should be called after calling the <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> ECM API.</p>
+<p >This function brings up the network interface. This function should be called after calling the <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> ECM API.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">static_ip_addr</td><td>: Configuration of the static IP address. If NULL, the IP address is created using DHCP. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ip_addr</td><td>: Pointer to return the IPv4 address (optional)</td></tr>
   </table>
@@ -479,7 +471,7 @@ Functions</h2></td></tr>
 <p >This function should be called after calling the <a class="el" href="group__group__ecm__functions.html#ga47943ffea422b5e0581505e20f4f226d">cy_ecm_connect</a> ECM API.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>.</td></tr>
   </table>
   </dd>
 </dl>
@@ -523,7 +515,7 @@ Functions</h2></td></tr>
 <p >This is an optional registration; use it if the application needs to monitor events across disconnection and reconnection.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">event_callback</td><td>: Callback function to be invoked for event notification. The callback will be executed in the context of the ECM.</td></tr>
   </table>
   </dd>
@@ -563,7 +555,7 @@ Functions</h2></td></tr>
 <p>Deregisters an event callback. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle obtained by <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle obtained by <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">event_callback</td><td>: Callback function to deregister from getting notifications</td></tr>
   </table>
   </dd>
@@ -603,7 +595,7 @@ Functions</h2></td></tr>
 <p>Provides the status of the link. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">status</td><td>: Pointer to store the link status(0=down, 1=up)</td></tr>
   </table>
   </dd>
@@ -643,7 +635,7 @@ Functions</h2></td></tr>
 <p>Retrieves the IPv4 address of the given interface. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ip_addr</td><td>: Pointer to an IP address structure (or) an IP address structure array</td></tr>
   </table>
   </dd>
@@ -690,7 +682,7 @@ Functions</h2></td></tr>
 <p >Note: Currently, this API supports only the <a class="el" href="group__group__ecm__enums.html#gga5ef9217cb8a52d7f906443e1ad95afb5ad0301d3ab7579c52e69edab5ef94fcba">CY_ECM_IPV6_LINK_LOCAL</a> type.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ipv6_addr_type</td><td>: IPv6 address type </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ip_addr</td><td>: Pointer to a structure filled with IP address</td></tr>
   </table>
@@ -733,7 +725,7 @@ Functions</h2></td></tr>
 <p>Retrieves the gateway IP address of the given interface. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">gateway_addr</td><td>: Pointer to a structure filled with the gateway IP address</td></tr>
   </table>
   </dd>
@@ -774,7 +766,7 @@ Functions</h2></td></tr>
 <p>Retrieves the subnet mask address of the given interface. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">net_mask_addr</td><td>: Pointer to a structure filled with the subnet mask address</td></tr>
   </table>
   </dd>
@@ -817,7 +809,7 @@ Functions</h2></td></tr>
 <p >This function is a blocking call and uses an internal timeout while running ARP.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">mac_addr</td><td>: Pointer to a MAC address structure which is filled with the gateway's MAC address on successful return.</td></tr>
   </table>
   </dd>
@@ -871,7 +863,7 @@ Functions</h2></td></tr>
 <p >This function is a blocking call; it returns after the specified timeout.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ip_addr</td><td>: Pointer to the destination IP address structure to which the ping request will be sent </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">timeout_ms</td><td>: Ping request timeout in milliseconds </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">elapsed_ms</td><td>: Pointer to store the round-trip time (in milliseconds); i.e., the time taken to receive the ping response from the destination.</td></tr>
@@ -921,7 +913,7 @@ Functions</h2></td></tr>
 <p>Retrieves the configured ethernet speed and duplex mode. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">duplex</td><td>: Pointer to cy_ecm_duplex_t enum which is filled with the duplex mode on successful return </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">speed</td><td>: Pointer to cy_ecm_speed_t enum which is filled with the link speed on successful return</td></tr>
   </table>
@@ -950,10 +942,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Deinitializes the Ethernet physical driver. </p>
-<p >Disables Ethernet port, brings down the network stack, and frees the handle. This function should be called after calling <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>.</p>
+<p >Disables Ethernet port, brings down the network stack, and frees the handle. This function should be called after calling <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">ecm_handle</td><td>: Pointer containing the ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a></td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">ecm_handle</td><td>: Pointer containing the ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a></td></tr>
   </table>
   </dd>
 </dl>

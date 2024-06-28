@@ -26,9 +26,9 @@ var group__group__ecm__enums =
     ] ],
     [ "cy_ecm_speed_type_t", "group__group__ecm__enums.html#ga4996f7bf858da646175429895490d072", [
       [ "CY_ECM_SPEED_TYPE_MII", "group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072a366f11ad263e15b276eec36b8461c6cb", null ],
+      [ "CY_ECM_SPEED_TYPE_RMII", "group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072acf6b9f713bf4e9fb7d50d40c20b68d41", null ],
       [ "CY_ECM_SPEED_TYPE_GMII", "group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072a540513126bfb6692db4f5f550454842d", null ],
-      [ "CY_ECM_SPEED_TYPE_RGMII", "group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072ae45c9f45e02b675afb8b9666598f4f18", null ],
-      [ "CY_ECM_SPEED_TYPE_RMII", "group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072acf6b9f713bf4e9fb7d50d40c20b68d41", null ]
+      [ "CY_ECM_SPEED_TYPE_RGMII", "group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072ae45c9f45e02b675afb8b9666598f4f18", null ]
     ] ],
     [ "cy_ecm_filter_type_t", "group__group__ecm__enums.html#ga3023c63e59bf47b91067fdb52dab874c", [
       [ "CY_ECM_FILTER_TYPE_DESTINATION", "group__group__ecm__enums.html#gga3023c63e59bf47b91067fdb52dab874ca8afc3638f9a10e9a1e0e8c1256e70730", null ],

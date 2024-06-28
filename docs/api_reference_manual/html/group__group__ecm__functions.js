@@ -2,7 +2,7 @@ var group__group__ecm__functions =
 [
     [ "cy_ecm_init", "group__group__ecm__functions.html#ga9bb2ae7395196acd5304c5ad00038a6a", null ],
     [ "cy_ecm_deinit", "group__group__ecm__functions.html#gae0769bf40b9eb139d70573644160dca1", null ],
-    [ "cy_ecm_ethif_init", "group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5", null ],
+    [ "cy_ecm_ethif_init", "group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380", null ],
     [ "cy_ecm_set_promiscuous_mode", "group__group__ecm__functions.html#ga13c35a4e6c210679a2dbeb5dee73884a", null ],
     [ "cy_ecm_broadcast_disable", "group__group__ecm__functions.html#gaa1cd96de76219fb84660834f9e57a8bc", null ],
     [ "cy_ecm_set_filter_address", "group__group__ecm__functions.html#ga807f76585391a681916a8dc81a4dcda4", null ],

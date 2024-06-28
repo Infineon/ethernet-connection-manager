@@ -6,7 +6,7 @@ var searchData=
   ['cy_5fecm_5fderegister_5fevent_5fcallback_3',['cy_ecm_deregister_event_callback',['../group__group__ecm__functions.html#ga0fc0e00148882b81bb4cd3aeab58f4bf',1,'cy_ecm.h']]],
   ['cy_5fecm_5fdisconnect_4',['cy_ecm_disconnect',['../group__group__ecm__functions.html#gacdc9135c536dc83d8f0a5af3fb563831',1,'cy_ecm.h']]],
   ['cy_5fecm_5fethif_5fdeinit_5',['cy_ecm_ethif_deinit',['../group__group__ecm__functions.html#gaec7c87dc3f6a6b035f7902961480d7f9',1,'cy_ecm.h']]],
-  ['cy_5fecm_5fethif_5finit_6',['cy_ecm_ethif_init',['../group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5',1,'cy_ecm.h']]],
+  ['cy_5fecm_5fethif_5finit_6',['cy_ecm_ethif_init',['../group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380',1,'cy_ecm.h']]],
   ['cy_5fecm_5fget_5fgateway_5faddress_7',['cy_ecm_get_gateway_address',['../group__group__ecm__functions.html#gab186910076eed55b434bf8b258c68dec',1,'cy_ecm.h']]],
   ['cy_5fecm_5fget_5fip_5faddress_8',['cy_ecm_get_ip_address',['../group__group__ecm__functions.html#ga0d24d3738cf80a768df1a28208e2b2b8',1,'cy_ecm.h']]],
   ['cy_5fecm_5fget_5fipv6_5faddress_9',['cy_ecm_get_ipv6_address',['../group__group__ecm__functions.html#gac1c8164cd4c91574f2938a552e37b2bb',1,'cy_ecm.h']]],

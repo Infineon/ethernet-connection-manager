@@ -100,11 +100,191 @@ typedef void *&#160;</td><td class="memItemRight" valign="bottom"><b>cy_ecm_t</b
 typedef uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>cy_ecm_mac_t</b>[<a class="el" href="group__group__ecm__macros.html#ga43ff877491f0929ab58e1aac5386337a">CY_ECM_MAC_ADDR_LEN</a>]</td></tr>
 <tr class="memdesc:gaad746e38751703388a8eedd9d206e741"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unique 6-byte MAC address represented in network byte order. <br /></td></tr>
 <tr class="separator:gaad746e38751703388a8eedd9d206e741"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga947b3ac98a892ba99534b536f86cfaa5"><td class="memItemLeft" align="right" valign="top">typedef cy_rslt_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#ga947b3ac98a892ba99534b536f86cfaa5">cy_ecm_phy_init</a>) (uint8_t eth_idx, ETH_Type *reg_base)</td></tr>
+<tr class="memdesc:ga947b3ac98a892ba99534b536f86cfaa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM PHY Init callback function pointer type.  <a href="group__group__ecm__typedefs.html#ga947b3ac98a892ba99534b536f86cfaa5">More...</a><br /></td></tr>
+<tr class="separator:ga947b3ac98a892ba99534b536f86cfaa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacf410fe886cae6f70c22289ec1fe9f8f"><td class="memItemLeft" align="right" valign="top">typedef cy_rslt_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#gacf410fe886cae6f70c22289ec1fe9f8f">cy_ecm_phy_configure</a>) (uint8_t eth_idx, uint32_t duplex, uint32_t speed)</td></tr>
+<tr class="memdesc:gacf410fe886cae6f70c22289ec1fe9f8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM PHY Configure callback function pointer type.  <a href="group__group__ecm__typedefs.html#gacf410fe886cae6f70c22289ec1fe9f8f">More...</a><br /></td></tr>
+<tr class="separator:gacf410fe886cae6f70c22289ec1fe9f8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga520e3c8c98f59e76503c303b9dced253"><td class="memItemLeft" align="right" valign="top">typedef cy_rslt_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#ga520e3c8c98f59e76503c303b9dced253">cy_ecm_phy_reset</a>) (uint8_t eth_idx, ETH_Type *reg_base)</td></tr>
+<tr class="memdesc:ga520e3c8c98f59e76503c303b9dced253"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM PHY Reset callback function pointer type.  <a href="group__group__ecm__typedefs.html#ga520e3c8c98f59e76503c303b9dced253">More...</a><br /></td></tr>
+<tr class="separator:ga520e3c8c98f59e76503c303b9dced253"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga288907630b7ac58d2d2e8909f4607b82"><td class="memItemLeft" align="right" valign="top">typedef cy_rslt_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#ga288907630b7ac58d2d2e8909f4607b82">cy_ecm_phy_discover</a>) (uint8_t eth_idx)</td></tr>
+<tr class="memdesc:ga288907630b7ac58d2d2e8909f4607b82"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM PHY Discover callback function pointer type.  <a href="group__group__ecm__typedefs.html#ga288907630b7ac58d2d2e8909f4607b82">More...</a><br /></td></tr>
+<tr class="separator:ga288907630b7ac58d2d2e8909f4607b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac0e39476fdd237569207fc9bb85b487a"><td class="memItemLeft" align="right" valign="top">typedef cy_rslt_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#gac0e39476fdd237569207fc9bb85b487a">cy_ecm_phy_enable_ext_reg</a>) (ETH_Type *reg_base, uint32_t speed)</td></tr>
+<tr class="memdesc:gac0e39476fdd237569207fc9bb85b487a"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM PHY enable extended Register callback function pointer type.  <a href="group__group__ecm__typedefs.html#gac0e39476fdd237569207fc9bb85b487a">More...</a><br /></td></tr>
+<tr class="separator:gac0e39476fdd237569207fc9bb85b487a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6d7a1af6a387b3fa39f0d635cbcbb60d"><td class="memItemLeft" align="right" valign="top">typedef cy_rslt_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#ga6d7a1af6a387b3fa39f0d635cbcbb60d">cy_ecm_phy_get_linkspeed</a>) (uint8_t eth_idx, uint32_t *duplex, uint32_t *speed)</td></tr>
+<tr class="memdesc:ga6d7a1af6a387b3fa39f0d635cbcbb60d"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM PHY Get Link speed callback function pointer type.  <a href="group__group__ecm__typedefs.html#ga6d7a1af6a387b3fa39f0d635cbcbb60d">More...</a><br /></td></tr>
+<tr class="separator:ga6d7a1af6a387b3fa39f0d635cbcbb60d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac7e1cc313cdbe76b7bebbd616363e72f"><td class="memItemLeft" align="right" valign="top">typedef cy_rslt_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#gac7e1cc313cdbe76b7bebbd616363e72f">cy_ecm_phy_get_linkstatus</a>) (uint8_t eth_idx, uint32_t *link_status)</td></tr>
+<tr class="memdesc:gac7e1cc313cdbe76b7bebbd616363e72f"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM PHY Get Link speed status function pointer type.  <a href="group__group__ecm__typedefs.html#gac7e1cc313cdbe76b7bebbd616363e72f">More...</a><br /></td></tr>
+<tr class="separator:gac7e1cc313cdbe76b7bebbd616363e72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5cbadaebc55d2e8f052f335ebca89cb3"><td class="memItemLeft" align="right" valign="top">typedef cy_rslt_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#ga5cbadaebc55d2e8f052f335ebca89cb3">cy_ecm_phy_get_auto_neg_status</a>) (uint8_t eth_idx, uint32_t *neg_status)</td></tr>
+<tr class="memdesc:ga5cbadaebc55d2e8f052f335ebca89cb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM PHY Get Auto Negotiation callback function pointer type.  <a href="group__group__ecm__typedefs.html#ga5cbadaebc55d2e8f052f335ebca89cb3">More...</a><br /></td></tr>
+<tr class="separator:ga5cbadaebc55d2e8f052f335ebca89cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1fa7da6073b7959addaa4278f219fbb5"><td class="memItemLeft" align="right" valign="top">typedef cy_rslt_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#ga1fa7da6073b7959addaa4278f219fbb5">cy_ecm_phy_get_link_partner_cap</a>) (uint8_t eth_idx, uint32_t *duplex, uint32_t *speed)</td></tr>
+<tr class="memdesc:ga1fa7da6073b7959addaa4278f219fbb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM PHY Get link partner capabilities callback function pointer type.  <a href="group__group__ecm__typedefs.html#ga1fa7da6073b7959addaa4278f219fbb5">More...</a><br /></td></tr>
+<tr class="separator:ga1fa7da6073b7959addaa4278f219fbb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafb7c1d36c88642ca15917cfe45bf6734"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__group__ecm__typedefs.html#gafb7c1d36c88642ca15917cfe45bf6734">cy_ecm_event_callback_t</a>) (<a class="el" href="group__group__ecm__enums.html#ga881b5ac88f8236e397b04652090324f6">cy_ecm_event_t</a> event, <a class="el" href="unioncy__ecm__event__data__t.html">cy_ecm_event_data_t</a> *event_data)</td></tr>
 <tr class="memdesc:gafb7c1d36c88642ca15917cfe45bf6734"><td class="mdescLeft">&#160;</td><td class="mdescRight">ECM event callback function pointer type; events are invoked when the Ethernet driver posts events to ECM.  <a href="group__group__ecm__typedefs.html#gafb7c1d36c88642ca15917cfe45bf6734">More...</a><br /></td></tr>
 <tr class="separator:gafb7c1d36c88642ca15917cfe45bf6734"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
+<a id="ga947b3ac98a892ba99534b536f86cfaa5" name="ga947b3ac98a892ba99534b536f86cfaa5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga947b3ac98a892ba99534b536f86cfaa5">&#9670;&nbsp;</a></span>cy_ecm_phy_init</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef cy_rslt_t(* cy_ecm_phy_init) (uint8_t eth_idx, ETH_Type *reg_base)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ECM PHY Init callback function pointer type. </p>
+<p >Callback functions are invoked when the ECM needs to call PHY Ethernet driver API's during driver initialization. Note: The callback function will be executed in the context of the ECM. </p>
+
+</div>
+</div>
+<a id="gacf410fe886cae6f70c22289ec1fe9f8f" name="gacf410fe886cae6f70c22289ec1fe9f8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gacf410fe886cae6f70c22289ec1fe9f8f">&#9670;&nbsp;</a></span>cy_ecm_phy_configure</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef cy_rslt_t(* cy_ecm_phy_configure) (uint8_t eth_idx, uint32_t duplex, uint32_t speed)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ECM PHY Configure callback function pointer type. </p>
+<p >Note: The callback function will be executed in the context of the ECM. </p>
+
+</div>
+</div>
+<a id="ga520e3c8c98f59e76503c303b9dced253" name="ga520e3c8c98f59e76503c303b9dced253"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga520e3c8c98f59e76503c303b9dced253">&#9670;&nbsp;</a></span>cy_ecm_phy_reset</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef cy_rslt_t(* cy_ecm_phy_reset) (uint8_t eth_idx, ETH_Type *reg_base)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ECM PHY Reset callback function pointer type. </p>
+<p >Note: The callback function will be executed in the context of the ECM. </p>
+
+</div>
+</div>
+<a id="ga288907630b7ac58d2d2e8909f4607b82" name="ga288907630b7ac58d2d2e8909f4607b82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga288907630b7ac58d2d2e8909f4607b82">&#9670;&nbsp;</a></span>cy_ecm_phy_discover</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef cy_rslt_t(* cy_ecm_phy_discover) (uint8_t eth_idx)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ECM PHY Discover callback function pointer type. </p>
+<p >Note: The callback function will be executed in the context of the ECM. </p>
+
+</div>
+</div>
+<a id="gac0e39476fdd237569207fc9bb85b487a" name="gac0e39476fdd237569207fc9bb85b487a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac0e39476fdd237569207fc9bb85b487a">&#9670;&nbsp;</a></span>cy_ecm_phy_enable_ext_reg</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef cy_rslt_t(* cy_ecm_phy_enable_ext_reg) (ETH_Type *reg_base, uint32_t speed)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ECM PHY enable extended Register callback function pointer type. </p>
+<p >Note: The callback function will be executed in the context of the ECM. </p>
+
+</div>
+</div>
+<a id="ga6d7a1af6a387b3fa39f0d635cbcbb60d" name="ga6d7a1af6a387b3fa39f0d635cbcbb60d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga6d7a1af6a387b3fa39f0d635cbcbb60d">&#9670;&nbsp;</a></span>cy_ecm_phy_get_linkspeed</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef cy_rslt_t(* cy_ecm_phy_get_linkspeed) (uint8_t eth_idx, uint32_t *duplex, uint32_t *speed)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ECM PHY Get Link speed callback function pointer type. </p>
+<p >Note: The callback function will be executed in the context of the ECM. </p>
+
+</div>
+</div>
+<a id="gac7e1cc313cdbe76b7bebbd616363e72f" name="gac7e1cc313cdbe76b7bebbd616363e72f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gac7e1cc313cdbe76b7bebbd616363e72f">&#9670;&nbsp;</a></span>cy_ecm_phy_get_linkstatus</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef cy_rslt_t(* cy_ecm_phy_get_linkstatus) (uint8_t eth_idx, uint32_t *link_status)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ECM PHY Get Link speed status function pointer type. </p>
+<p >Note: The callback function will be executed in the context of the ECM. </p>
+
+</div>
+</div>
+<a id="ga5cbadaebc55d2e8f052f335ebca89cb3" name="ga5cbadaebc55d2e8f052f335ebca89cb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga5cbadaebc55d2e8f052f335ebca89cb3">&#9670;&nbsp;</a></span>cy_ecm_phy_get_auto_neg_status</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef cy_rslt_t(* cy_ecm_phy_get_auto_neg_status) (uint8_t eth_idx, uint32_t *neg_status)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ECM PHY Get Auto Negotiation callback function pointer type. </p>
+<p >Note: The callback function will be executed in the context of the ECM. </p>
+
+</div>
+</div>
+<a id="ga1fa7da6073b7959addaa4278f219fbb5" name="ga1fa7da6073b7959addaa4278f219fbb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga1fa7da6073b7959addaa4278f219fbb5">&#9670;&nbsp;</a></span>cy_ecm_phy_get_link_partner_cap</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef cy_rslt_t(* cy_ecm_phy_get_link_partner_cap) (uint8_t eth_idx, uint32_t *duplex, uint32_t *speed)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ECM PHY Get link partner capabilities callback function pointer type. </p>
+<p >Note: The callback function will be executed in the context of the ECM. </p>
+
+</div>
+</div>
 <a id="gafb7c1d36c88642ca15917cfe45bf6734" name="gafb7c1d36c88642ca15917cfe45bf6734"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gafb7c1d36c88642ca15917cfe45bf6734">&#9670;&nbsp;</a></span>cy_ecm_event_callback_t</h2>
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2024, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -46,6 +46,7 @@
 #include "cy_log.h"
 #include "cy_ecm.h"
 #include "cy_ecm_error.h"
+#include "cycfg.h"
 
 #ifdef ENABLE_ECM_LOGS
 #define cy_ecm_log_msg cy_log_msg
@@ -53,213 +54,20 @@
 #define cy_ecm_log_msg(a,b,c,...)
 #endif
 
-#define SLEEP_ETHERNET_PHY_STATUS                 (500) /* Sleep time in milliseconds. */
-/********************************************************/
-/******************EMAC configuration********************/
-/********************************************************/
-#define EMAC_MII             0
-#define EMAC_RMII            1
-#define EMAC_GMII            2
-#define EMAC_RGMII           3
+#define SLEEP_ETHERNET_PHY_STATUS                 (1) /* Sleep time in milliseconds. */
 
 /********************************************************/
-/** PHY Mode Selection       */
-#define EMAC_INTERFACE       EMAC_RGMII
-
-/********************************************************/
-
-#define ETH_INTR_SRC         (CY_GIG_ETH_IRQN0)
-#define ETH_INTR_SRC_Q1      (CY_GIG_ETH_IRQN1)
-#define ETH_INTR_SRC_Q2      (CY_GIG_ETH_IRQN2)
-
-#define ETHx_TD0_PORT        CY_GIG_ETH_TD0_PORT
-#define ETHx_TD0_PIN         CY_GIG_ETH_TD0_PIN
-#define ETHx_TD0_PIN_MUX     CY_GIG_ETH_TD0_PIN_MUX
-
-#define ETHx_TD1_PORT        CY_GIG_ETH_TD1_PORT
-#define ETHx_TD1_PIN         CY_GIG_ETH_TD1_PIN
-#define ETHx_TD1_PIN_MUX     CY_GIG_ETH_TD1_PIN_MUX
-
-#define ETHx_TD2_PORT        CY_GIG_ETH_TD2_PORT
-#define ETHx_TD2_PIN         CY_GIG_ETH_TD2_PIN
-#define ETHx_TD2_PIN_MUX     CY_GIG_ETH_TD2_PIN_MUX
-
-#define ETHx_TD3_PORT        CY_GIG_ETH_TD3_PORT
-#define ETHx_TD3_PIN         CY_GIG_ETH_TD3_PIN
-#define ETHx_TD3_PIN_MUX     CY_GIG_ETH_TD3_PIN_MUX
-
-#if (EMAC_INTERFACE != EMAC_RGMII)
-
-#define ETHx_TD4_PORT        CY_GIG_ETH_TD4_PORT
-#define ETHx_TD4_PIN         CY_GIG_ETH_TD4_PIN
-#define ETHx_TD4_PIN_MUX     CY_GIG_ETH_TD4_PIN_MUX
-
-#define ETHx_TD5_PORT        CY_GIG_ETH_TD5_PORT
-#define ETHx_TD5_PIN         CY_GIG_ETH_TD5_PIN
-#define ETHx_TD5_PIN_MUX     CY_GIG_ETH_TD5_PIN_MUX
-
-#define ETHx_TD6_PORT        CY_GIG_ETH_TD6_PORT
-#define ETHx_TD6_PIN         CY_GIG_ETH_TD6_PIN
-#define ETHx_TD6_PIN_MUX     CY_GIG_ETH_TD6_PIN_MUX
-
-#define ETHx_TD7_PORT        CY_GIG_ETH_TD7_PORT
-#define ETHx_TD7_PIN         CY_GIG_ETH_TD7_PIN
-#define ETHx_TD7_PIN_MUX     CY_GIG_ETH_TD7_PIN_MUX
-
-#define ETHx_TXER_PORT       CY_GIG_ETH_TXER_PORT
-#define ETHx_TXER_PIN        CY_GIG_ETH_TXER_PIN
-#define ETHx_TXER_PIN_MUX    CY_GIG_ETH_TXER_PIN_MUX
-
-#endif /* (EMAC_INTERFACE != EMAC_RGMII) */
-
-#define ETHx_TX_CTL_PORT     CY_GIG_ETH_TX_CLK_PORT
-#define ETHx_TX_CTL_PIN      CY_GIG_ETH_TX_CTL_PIN
-#define ETHx_TX_CTL_PIN_MUX  CY_GIG_ETH_TX_CTL_PIN_MUX
-
-#define ETHx_RD0_PORT        CY_GIG_ETH_RD0_PORT
-#define ETHx_RD0_PIN         CY_GIG_ETH_RD0_PIN
-#define ETHx_RD0_PIN_MUX     CY_GIG_ETH_RD0_PIN_MUX
-
-#define ETHx_RD1_PORT        CY_GIG_ETH_RD1_PORT
-#define ETHx_RD1_PIN         CY_GIG_ETH_RD1_PIN
-#define ETHx_RD1_PIN_MUX     CY_GIG_ETH_RD1_PIN_MUX
-
-#define ETHx_RD2_PORT        CY_GIG_ETH_RD2_PORT
-#define ETHx_RD2_PIN         CY_GIG_ETH_RD2_PIN
-#define ETHx_RD2_PIN_MUX     CY_GIG_ETH_RD2_PIN_MUX
-
-#define ETHx_RD3_PORT        CY_GIG_ETH_RD3_PORT
-#define ETHx_RD3_PIN         CY_GIG_ETH_RD3_PIN
-#define ETHx_RD3_PIN_MUX     CY_GIG_ETH_RD3_PIN_MUX
-
-#if (EMAC_INTERFACE != EMAC_RGMII)
-
-#define ETHx_RD4_PORT        CY_GIG_ETH_RD4_PORT
-#define ETHx_RD4_PIN         CY_GIG_ETH_RD4_PIN
-#define ETHx_RD4_PIN_MUX     CY_GIG_ETH_RD4_PIN_MUX
-
-#define ETHx_RD5_PORT        CY_GIG_ETH_RD5_PORT
-#define ETHx_RD5_PIN         CY_GIG_ETH_RD5_PIN
-#define ETHx_RD5_PIN_MUX     CY_GIG_ETH_RD5_PIN_MUX
-
-#define ETHx_RD6_PORT        CY_GIG_ETH_RD6_PORT
-#define ETHx_RD6_PIN         CY_GIG_ETH_RD6_PIN
-#define ETHx_RD6_PIN_MUX     CY_GIG_ETH_RD6_PIN_MUX
-
-#define ETHx_RD7_PORT        CY_GIG_ETH_RD7_PORT
-#define ETHx_RD7_PIN         CY_GIG_ETH_RD7_PIN
-#define ETHx_RD7_PIN_MUX     CY_GIG_ETH_RD7_PIN_MUX
-
-#define ETHx_RX_ER_PORT      CY_GIG_ETH_RX_ER_PORT
-#define ETHx_RX_ER_PIN       CY_GIG_ETH_RX_ER_PIN
-#define ETHx_RX_ER_PIN_MUX   CY_GIG_ETH_RX_ER_PIN_MUX
-
-#endif /* #if (EMAC_INTERFACE != EMAC_RGMII) */
-
-#define ETHx_RX_CTL_PORT     CY_GIG_ETH_RX_CTL_PORT
-#define ETHx_RX_CTL_PIN      CY_GIG_ETH_RX_CTL_PIN
-#define ETHx_RX_CTL_PIN_MUX  CY_GIG_ETH_RX_CTL_PIN_MUX
-
-#define ETHx_TX_CLK_PORT     CY_GIG_ETH_TX_CLK_PORT
-#define ETHx_TX_CLK_PIN      CY_GIG_ETH_TX_CLK_PIN
-#define ETHx_TX_CLK_PIN_MUX  CY_GIG_ETH_TX_CLK_PIN_MUX
-
-#define ETHx_RX_CLK_PORT     CY_GIG_ETH_RX_CLK_PORT
-#define ETHx_RX_CLK_PIN      CY_GIG_ETH_RX_CLK_PIN
-#define ETHx_RX_CLK_PIN_MUX  CY_GIG_ETH_RX_CLK_PIN_MUX
-
-#define ETHx_REF_CLK_PORT    CY_GIG_ETH_REF_CLK_PORT
-#define ETHx_REF_CLK_PIN     CY_GIG_ETH_REF_CLK_PIN
-#define ETHx_REF_CLK_PIN_MUX CY_GIG_ETH_REF_CLK_PIN_MUX
-
-#define ETHx_MDC_PORT        CY_GIG_ETH_MDC_PORT
-#define ETHx_MDC_PIN         CY_GIG_ETH_MDC_PIN
-#define ETHx_MDC_PIN_MUX     CY_GIG_ETH_MDC_PIN_MUX
-
-#define ETHx_MDIO_PORT       CY_GIG_ETH_MDIO_PORT
-#define ETHx_MDIO_PIN        CY_GIG_ETH_MDIO_PIN
-#define ETHx_MDIO_PIN_MUX    CY_GIG_ETH_MDIO_PIN_MUX
-
-/* Bits masks to verify auto negotiation configured speed */
-#define ANLPAR_10_Msk                           (0x00000020UL)  /**< 10BASE-Te Support */
-#define ANLPAR_10_Pos                           (5UL)           /**< 10BASE-Te bit position */
-#define ANLPAR_10FD_Msk                         (0x00000040UL)  /**< 10BASE-Te Full Duplex Support */
-#define ANLPAR_10FD_Pos                         (6UL)           /**< 10BASE-Te Full Duplex bit position */
-
-#define ANLPAR_TX_Msk                           (0x00000080UL)  /**< 100BASE-TX Support */
-#define ANLPAR_TX_Pos                           (7UL)           /**< 100BASE-TX bit position */
-#define ANLPAR_TXFD_Msk                         (0x00000100UL)  /**< 100BASE-TX Full Duplex Support */
-#define ANLPAR_TXFD_Pos                         (8UL)           /**< 100BASE-TX Full Duplex bit position */
-#define ANLPAR_T4_Msk                           (0x00000200UL)  /**< 100BASE-T4 Support */
-#define ANLPAR_T4_Pos                           (9UL)           /**< 100BASE-T4 bit position */
-
-#define STS1_1000BASE_T_HALFDUPLEX_Msk          (0x00000400UL)  /**< 1000BASE-T Half-Duplex Capable */
-#define STS1_1000BASE_T_HALFDUPLEX_Pos          (10UL)          /**< 1000BASE-T Half-Duplex bit position */
-#define STS1_1000BASE_T_FULLDUPLEX_Msk          (0x00000800UL)  /**< 1000BASE-T Full-Duplex Capable */
-#define STS1_1000BASE_T_FULLDUPLEX_Pos          (11UL)          /**< 1000BASE-T Full-Duplex bit position */
-
-/********************************************************/
-
-/** PHY related constants    */
-#define PHY_ADDR             (0) /* Value depends on PHY and its hardware configurations */
-#define PHY_ID_DP83867IR     (0x2000A231) /* PHYIDR1=0x2000 PHYIDR2=0xA231 */
-
 extern uint8_t *pRx_Q_buff_pool[CY_ETH_DEFINE_TOTAL_BD_PER_RXQUEUE];
-/********************************************************/
-void phyRead(uint32_t phyId, uint32_t regAddress, uint32_t *value);
-void phyWrite(uint32_t phyId, uint32_t regAddress, uint32_t value);
 
+/********************************************************/
 extern void cy_process_ethernet_data_cb(ETH_Type *eth_type, uint8_t * rx_buffer, uint32_t length);
 extern void cy_notify_ethernet_rx_data_cb(ETH_Type *base, uint8_t **u8RxBuffer, uint32_t *u32Length);
 extern void cy_tx_complete_cb ( ETH_Type *pstcEth, uint8_t u8QueueIndex );
 extern void cy_tx_failure_cb ( ETH_Type *pstcEth, uint8_t u8QueueIndex );
-static void ethernet_portpins_init(cy_ecm_speed_type_t interface_speed_type);
-
-static void init_phy_DP83867IR(ETH_Type *reg_base, cy_ecm_phy_config_t *ecm_phy_config, cy_stc_ephy_t *phy_obj);
-static void enable_phy_DP83867IR_extended_reg(ETH_Type *reg_base, cy_ecm_phy_config_t *ecm_phy_config);
-
-/********************************************************/
-// EMAC *********
-
-/**                      PortPinName.outVal||  driveMode               hsiom             ||intEdge||intMask||vtrip||slewRate||driveSel||vregEn||ibufMode||vtripSel||vrefSel||vohSel*/
-static cy_stc_gpio_pin_config_t ethx_tx0   = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TD0_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-static cy_stc_gpio_pin_config_t ethx_tx1   = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TD1_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-static cy_stc_gpio_pin_config_t ethx_tx2   = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TD2_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-static cy_stc_gpio_pin_config_t ethx_tx3   = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TD3_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-
-#if EMAC_INTERFACE == EMAC_GMII
-cy_stc_gpio_pin_config_t ethx_tx4   = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TD4_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-cy_stc_gpio_pin_config_t ethx_tx5   = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TD5_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-cy_stc_gpio_pin_config_t ethx_tx6   = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TD6_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-cy_stc_gpio_pin_config_t ethx_tx7   = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TD7_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-#endif
-
-static cy_stc_gpio_pin_config_t ethx_txctl = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TX_CTL_PIN_MUX,  0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-static cy_stc_gpio_pin_config_t ethx_rx0   = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_RD0_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-static cy_stc_gpio_pin_config_t ethx_rx1   = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_RD1_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-static cy_stc_gpio_pin_config_t ethx_rx2   = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_RD2_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-static cy_stc_gpio_pin_config_t ethx_rx3   = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_RD3_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-
-#if EMAC_INTERFACE == EMAC_GMII
-cy_stc_gpio_pin_config_t ethx_rx4   = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_RD4_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-cy_stc_gpio_pin_config_t ethx_rx5   = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_RD5_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-cy_stc_gpio_pin_config_t ethx_rx6   = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_RD6_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-cy_stc_gpio_pin_config_t ethx_rx7   = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_RD7_PIN_MUX,     0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-#endif
-
-static cy_stc_gpio_pin_config_t ethx_rxctl = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_RX_CTL_PIN_MUX,  0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-
-#if EMAC_INTERFACE == EMAC_MII
-cy_stc_gpio_pin_config_t ethx_txclk = {0x00, CY_GPIO_DM_HIGHZ,         ETHx_TX_CLK_PIN_MUX,  0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-#else
-static cy_stc_gpio_pin_config_t ethx_txclk = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_TX_CLK_PIN_MUX,  0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-#endif
-
-static cy_stc_gpio_pin_config_t ethx_rxclk  = {0x00, CY_GPIO_DM_HIGHZ,       ETHx_RX_CLK_PIN_MUX,  0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-static cy_stc_gpio_pin_config_t ethx_refclk = {0x00, CY_GPIO_DM_HIGHZ,        ETHx_REF_CLK_PIN_MUX, 0,       0,       0,     0,        0,        0,      0,        0,        0,       0};
-
-static cy_stc_gpio_pin_config_t ethx_mdc   = {0x00, CY_GPIO_DM_STRONG_IN_OFF, ETHx_MDC_PIN_MUX,     0,       0,       0,     0,        3,        0,      0,        0,        0,       0};
-static cy_stc_gpio_pin_config_t ethx_mdio  = {0x00, CY_GPIO_DM_STRONG,        ETHx_MDIO_PIN_MUX,    0,       0,       0,     0,        3,        0,      0,        0,        0,       0};
+static void cy_eth_phy_initialization ( cy_ecm_interface_t eth_idx,
+                                        ETH_Type *reg_base,
+                                        cy_ecm_phy_config_t *ecm_phy_config,
+                                        cy_ecm_phy_callbacks_t *phy_callbacks );
 
 /********************************************************/
 
@@ -337,16 +145,34 @@ static cy_stc_ethif_cb_t stcInterruptCB = {
 };
 
 /** Enable Ethernet interrupts  */
-static const cy_stc_sysint_t irq_cfg_ethx_q0 = {.intrSrc  = ((NvicMux3_IRQn << 16) | ETH_INTR_SRC),    .intrPriority=3UL};
-static const cy_stc_sysint_t irq_cfg_ethx_q1 = {.intrSrc  = ((NvicMux3_IRQn << 16) | ETH_INTR_SRC_Q1), .intrPriority=3UL};
-static const cy_stc_sysint_t irq_cfg_ethx_q2 = {.intrSrc  = ((NvicMux3_IRQn << 16) | ETH_INTR_SRC_Q2), .intrPriority=3UL};
+#if (defined (eth_0_ENABLED) && (eth_0_ENABLED == 1u))
+static const cy_stc_sysint_t irq_cfg_eth0_q0 = {.intrSrc  = (eth_0_INTRSRC_Q0), .intrPriority=eth_0_INTRPRIORITY};
+static const cy_stc_sysint_t irq_cfg_eth0_q1 = {.intrSrc  = (eth_0_INTRSRC_Q1), .intrPriority=eth_0_INTRPRIORITY};
+static const cy_stc_sysint_t irq_cfg_eth0_q2 = {.intrSrc  = (eth_0_INTRSRC_Q2), .intrPriority=eth_0_INTRPRIORITY};
+#endif
+
+#if (defined (eth_1_ENABLED) && (eth_1_ENABLED == 1u))
+static const cy_stc_sysint_t irq_cfg_eth1_q0 = {.intrSrc  = (eth_1_INTRSRC_Q0), .intrPriority=eth_1_INTRPRIORITY};
+static const cy_stc_sysint_t irq_cfg_eth1_q1 = {.intrSrc  = (eth_1_INTRSRC_Q1), .intrPriority=eth_1_INTRPRIORITY};
+static const cy_stc_sysint_t irq_cfg_eth1_q2 = {.intrSrc  = (eth_1_INTRSRC_Q2), .intrPriority=eth_1_INTRPRIORITY};
+#endif
 
 /********************************************************/
-/** Interrupt handlers for Ethernet 1     */
-static void Cy_Ethx_InterruptHandler (void)
+/** Interrupt handlers for Ethernet 0     */
+#if (defined (eth_0_ENABLED) && (eth_0_ENABLED == 1u))
+static void Cy_Eth0_InterruptHandler (void)
 {
-    Cy_ETHIF_DecodeEvent(ETH_REG_BASE);
+    Cy_ETHIF_DecodeEvent(ETH0);
 }
+#endif
+
+/** Interrupt handlers for Ethernet 1     */
+#if (defined (eth_1_ENABLED) && (eth_1_ENABLED == 1u))
+static void Cy_Eth1_InterruptHandler (void)
+{
+    Cy_ETHIF_DecodeEvent(ETH1);
+}
+#endif
 
 static cy_en_ethif_speed_sel_t ecm_config_to_speed_sel( cy_ecm_phy_config_t *config)
 {
@@ -383,7 +209,7 @@ static cy_en_ethif_speed_sel_t ecm_config_to_speed_sel( cy_ecm_phy_config_t *con
     return speed_sel;
 }
 
-static void eth_clock_config(cy_en_ethif_speed_sel_t speed_sel, cy_ecm_phy_speed_t phy_speed)
+static void eth_clock_config(cy_ecm_interface_t eth_idx, cy_en_ethif_speed_sel_t speed_sel, cy_ecm_phy_speed_t phy_speed)
 {
     if((speed_sel == CY_ETHIF_CTL_MII_10) && (phy_speed == CY_ECM_PHY_SPEED_10M))
         stcWrapperConfig.stcInterfaceSel = CY_ETHIF_CTL_MII_10;       /** 10 Mbps MII */
@@ -403,8 +229,22 @@ static void eth_clock_config(cy_en_ethif_speed_sel_t speed_sel, cy_ecm_phy_speed
         stcWrapperConfig.stcInterfaceSel = CY_ETHIF_CTL_RMII_100;     /** 100 Mbps RMII */
     else
         stcWrapperConfig.stcInterfaceSel = CY_ETHIF_CTL_RGMII_1000;  /** Error in configuration */
-
-    stcWrapperConfig.bRefClockSource = CY_ETHIF_EXTERNAL_HSIO;     /** Assigning Ref_Clk to HSIO clock; use an external clock from HSIO  */
+    if(eth_idx == CY_ECM_INTERFACE_ETH0)
+    {
+#if (defined (eth_0_ENABLED) && (eth_0_ENABLED == 1u))
+        stcWrapperConfig.bRefClockSource = (cy_en_ethif_clock_ref_t)eth_0_MAC_CLOCK;     /** Assigning Ref_Clk to HSIO clock; use an external clock from HSIO  */
+#endif
+    }
+    else if(eth_idx == CY_ECM_INTERFACE_ETH1)
+    {
+#if (defined (eth_1_ENABLED) && (eth_1_ENABLED == 1u))
+        stcWrapperConfig.bRefClockSource = (cy_en_ethif_clock_ref_t)eth_1_MAC_CLOCK;     /** Assigning Ref_Clk to HSIO clock; use an external clock from HSIO  */
+#endif
+    }
+    else
+    {
+        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "%s() Invalid Ethernet Interface... \n", __FUNCTION__ );
+    }
 
     if(phy_speed == CY_ECM_PHY_SPEED_10M)
         stcWrapperConfig.u8RefClkDiv = 10;                         /** RefClk: 25 MHz; divide Refclock by 10 to have a 2.5-MHz Tx clock  */
@@ -418,48 +258,54 @@ static void eth_clock_config(cy_en_ethif_speed_sel_t speed_sel, cy_ecm_phy_speed
     return;
 }
 
-void phyRead(uint32_t phyId, uint32_t regAddress, uint32_t *value)
-{
-    *value = Cy_ETHIF_PhyRegRead(ETH_REG_BASE, regAddress, phyId);
-}
-
-void phyWrite(uint32_t phyId, uint32_t regAddress, uint32_t value)
-{
-    Cy_ETHIF_PhyRegWrite(ETH_REG_BASE, regAddress, value, phyId);
-}
-
-cy_rslt_t cy_eth_driver_initialization(ETH_Type *reg_base, cy_ecm_phy_config_t *ecm_phy_config, cy_stc_ephy_t *phy_obj)
+cy_rslt_t cy_eth_driver_initialization(cy_ecm_interface_t eth_idx,
+                                       ETH_Type *reg_base,
+                                       cy_ecm_phy_config_t *ecm_phy_config,
+                                       cy_ecm_phy_callbacks_t *phy_callbacks)
 {
     cy_rslt_t  result = CY_RSLT_SUCCESS;
-    uint32_t   retry_count = 0;
+    uint32_t   retry_count = 0, link_status = 0;
 
     cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "%s(): START \n", __FUNCTION__ );
 
-    /** Configure Ethernet port pins    */
-    ethernet_portpins_init(ecm_phy_config->interface_speed_type);
-
-    Cy_SysInt_Init(&irq_cfg_ethx_q0, Cy_Ethx_InterruptHandler);
-    Cy_SysInt_Init(&irq_cfg_ethx_q1, Cy_Ethx_InterruptHandler);
-    Cy_SysInt_Init(&irq_cfg_ethx_q2, Cy_Ethx_InterruptHandler);
-
-    NVIC_ClearPendingIRQ(NvicMux3_IRQn);
-    NVIC_EnableIRQ(NvicMux3_IRQn);
-
-    cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "ETH_REG_BASE=[%p] reg_base = [%p] \n", ETH_REG_BASE, reg_base );
+    if(eth_idx == CY_ECM_INTERFACE_ETH0)
+    {
+#if (defined (eth_0_ENABLED) && (eth_0_ENABLED == 1u))
+        Cy_SysInt_Init(&irq_cfg_eth0_q0, Cy_Eth0_InterruptHandler);
+        Cy_SysInt_Init(&irq_cfg_eth0_q1, Cy_Eth0_InterruptHandler);
+        Cy_SysInt_Init(&irq_cfg_eth0_q2, Cy_Eth0_InterruptHandler);
+        NVIC_ClearPendingIRQ((IRQn_Type)eth_0_INTRMUXNUMBER);
+        NVIC_EnableIRQ((IRQn_Type)eth_0_INTRMUXNUMBER);
+#endif
+    }
+    else
+    {
+#if (defined (eth_1_ENABLED) && (eth_1_ENABLED == 1u))
+        Cy_SysInt_Init(&irq_cfg_eth1_q0, Cy_Eth1_InterruptHandler);
+        Cy_SysInt_Init(&irq_cfg_eth1_q1, Cy_Eth1_InterruptHandler);
+        Cy_SysInt_Init(&irq_cfg_eth1_q2, Cy_Eth1_InterruptHandler);
+        NVIC_ClearPendingIRQ((IRQn_Type)eth_1_INTRMUXNUMBER);
+        NVIC_EnableIRQ((IRQn_Type)eth_1_INTRMUXNUMBER);
+#endif
+    }
 
     /* rx Q0 buffer pool */
     stcENETConfig.pRxQbuffPool[0] = (cy_ethif_buffpool_t *)&pRx_Q_buff_pool;
     stcENETConfig.pRxQbuffPool[1] = NULL;
 
     /** Initialize PHY  */
-    init_phy_DP83867IR(reg_base, ecm_phy_config, phy_obj);
+    cy_eth_phy_initialization(eth_idx, reg_base, ecm_phy_config, phy_callbacks);
 
     while( retry_count < MAX_WAIT_ETHERNET_PHY_STATUS)
     {
-        if (Cy_EPHY_GetLinkStatus(phy_obj) == 1UL )
+        result = phy_callbacks->phy_get_linkstatus((uint8_t)eth_idx, &link_status);
+        if(result == CY_RSLT_SUCCESS)
         {
-            result = CY_RSLT_SUCCESS;
-            break;
+            if(link_status == 1)
+            {
+                result = CY_RSLT_SUCCESS;
+                break;
+            }
         }
         cy_rtos_delay_milliseconds(SLEEP_ETHERNET_PHY_STATUS);
         retry_count += SLEEP_ETHERNET_PHY_STATUS;
@@ -487,82 +333,38 @@ void deregister_cb(ETH_Type *reg_base)
 }
 
 /*******************************************************************************
-* Function name: ethernet_portpins_init
+* Function name: cy_eth_phy_initialization
 ****************************************************************************//**
 *
-* \brief Initializes Ethernet port pins
-*
-* \Note:
-*******************************************************************************/
-static void ethernet_portpins_init (cy_ecm_speed_type_t interface_speed_type)
-{
-    (void)interface_speed_type;
-    Cy_GPIO_Pin_Init(ETHx_TD0_PORT, ETHx_TD0_PIN, &ethx_tx0);                       /** TX0 */
-    Cy_GPIO_Pin_Init(ETHx_TD1_PORT, ETHx_TD1_PIN, &ethx_tx1);                       /** TX1 */
-    Cy_GPIO_Pin_Init(ETHx_TD2_PORT, ETHx_TD2_PIN, &ethx_tx2);                       /** TX2 */
-    Cy_GPIO_Pin_Init(ETHx_TD3_PORT, ETHx_TD3_PIN, &ethx_tx3);                       /** TX3 */
-
-    Cy_GPIO_Pin_Init(ETHx_TX_CTL_PORT, ETHx_TX_CTL_PIN, &ethx_txctl);               /** TX_CTL  */
-
-    Cy_GPIO_Pin_Init(ETHx_RD0_PORT, ETHx_RD0_PIN, &ethx_rx0);                       /** RX0 */
-    Cy_GPIO_Pin_Init(ETHx_RD1_PORT, ETHx_RD1_PIN, &ethx_rx1);                       /** RX1 */
-    Cy_GPIO_Pin_Init(ETHx_RD2_PORT, ETHx_RD2_PIN, &ethx_rx2);                       /** RX2 */
-    Cy_GPIO_Pin_Init(ETHx_RD3_PORT, ETHx_RD3_PIN, &ethx_rx3);                       /** RX3 */
-
-    Cy_GPIO_Pin_Init(ETHx_RX_CTL_PORT, ETHx_RX_CTL_PIN, &ethx_rxctl);               /** RX_CTL  */
-
-    Cy_GPIO_Pin_Init(ETHx_REF_CLK_PORT, ETHx_REF_CLK_PIN, &ethx_refclk);            /** REF_CLK */
-
-    Cy_GPIO_Pin_Init(ETHx_TX_CLK_PORT, ETHx_TX_CLK_PIN, &ethx_txclk);               /** TX_CLK  */
-    Cy_GPIO_Pin_Init(ETHx_RX_CLK_PORT, ETHx_RX_CLK_PIN, &ethx_rxclk);               /** RX_CLK  */
-
-    Cy_GPIO_Pin_Init(ETHx_MDC_PORT,  ETHx_MDC_PIN, &ethx_mdc);                      /** MDC     */
-    Cy_GPIO_Pin_Init(ETHx_MDIO_PORT, ETHx_MDIO_PIN, &ethx_mdio);                    /** MDIO    */
-}
-
-/*******************************************************************************
-* Function name: init_phy_DP83867IR
-****************************************************************************//**
-*
-* \brief Dedicated to initialize PHY DP83867IR
+* \brief Dedicated to initialize ETH PHY
 * Configures the PHY with 10-Mbps link speed, full-duplex communication, and auto negotiation off
 *
-* \Note:
-* If the hardware consists of any other PHY than DP83867IR, a dedicated function must be written to configure relevant
-* registers inside the PHY
+* \Note: Implementation of PHY callbacks called from this function will differ based on the Ethernet PHY hardware used.
+*
 *******************************************************************************/
-static void init_phy_DP83867IR (ETH_Type *reg_base, cy_ecm_phy_config_t *ecm_phy_config, cy_stc_ephy_t *phy_obj)
+static void cy_eth_phy_initialization (cy_ecm_interface_t eth_idx, ETH_Type *reg_base,
+                                       cy_ecm_phy_config_t *ecm_phy_config,
+                                       cy_ecm_phy_callbacks_t *phy_callbacks)
 {
-    cy_stc_ephy_config_t    phyConfig;
     cy_en_ethif_speed_sel_t speed_sel;
-    uint32_t                value = 0;
-    uint16_t                configured_hw_speed;
+    uint32_t                duplex = 0, phy_speed = 0, neg_status = 0;
     cy_en_ethif_status_t    eth_status;
+    cy_rslt_t               result = CY_RSLT_SUCCESS;
 
     /* Driver configuration is already done */
     if(is_driver_configured == true)
     {
         /* Initialize the PHY */
-        Cy_EPHY_Init(phy_obj, phyRead, phyWrite);
+        (void)phy_callbacks->phy_init((uint8_t)eth_idx, reg_base);
 
         /* If driver already configured and the auto negotiation is enabled, replace the speed and mode by the auto negotiated values decided during driver initialization */
         if(ecm_phy_config->mode == CY_ECM_DUPLEX_AUTO || ecm_phy_config->phy_speed == CY_ECM_PHY_SPEED_AUTO)
         {
-            phyRead( 0, REGISTER_ADDRESS_PHY_REG_BMCR, &value );
-            cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "REGISTER_ADDRESS_PHY_REG_BMCR = 0x%X\n", (unsigned long)value );
-            ecm_phy_config->mode = ((value & (REGISTER_PHY_REG_DUPLEX_MASK)) == 0) ? CY_ECM_DUPLEX_HALF : CY_ECM_DUPLEX_FULL;
-            configured_hw_speed = value & (REGISTER_PHY_REG_SPEED_MASK);
-            if(configured_hw_speed == REGISTER_PHY_REG_SPEED_MASK_10M)
+            result = phy_callbacks->phy_get_linkspeed((uint8_t)eth_idx, &duplex, &phy_speed);
+            if(result == CY_RSLT_SUCCESS)
             {
-                ecm_phy_config->phy_speed = CY_ECM_PHY_SPEED_10M;
-            }
-            else if (configured_hw_speed == REGISTER_PHY_REG_SPEED_MASK_100M)
-            {
-                ecm_phy_config->phy_speed = CY_ECM_PHY_SPEED_100M;
-            }
-            else if(configured_hw_speed ==  REGISTER_PHY_REG_SPEED_MASK_1000M)
-            {
-                ecm_phy_config->phy_speed = CY_ECM_PHY_SPEED_1000M;
+                ecm_phy_config->phy_speed = (cy_ecm_phy_speed_t)phy_speed;
+                ecm_phy_config->mode      = (cy_ecm_duplex_t)duplex;
             }
         }
     }
@@ -580,31 +382,41 @@ static void init_phy_DP83867IR (ETH_Type *reg_base, cy_ecm_phy_config_t *ecm_phy
             }
             cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "Ethernet MAC Pre-Init success \n" );
 
-            /* Start auto negotiation */
-            phyConfig.speed = (cy_en_ephy_speed_t)CY_ECM_PHY_SPEED_AUTO;
-            phyConfig.duplex = (cy_en_ephy_duplex_t)CY_ECM_DUPLEX_AUTO;
-
             /* Initialize the PHY */
-            Cy_EPHY_Init(phy_obj, phyRead, phyWrite);
+            (void)phy_callbacks->phy_init((uint8_t)eth_idx, reg_base);
 
-            Cy_EPHY_Configure( phy_obj, &phyConfig );
+            /* Start auto negotiation */
+            duplex = (uint32_t)CY_ECM_DUPLEX_AUTO;
+            phy_speed = (uint32_t)CY_ECM_PHY_SPEED_AUTO;
+
+            /* Configure PHY */
+            (void)phy_callbacks->phy_configure((uint8_t)eth_idx, duplex, phy_speed);
+
             /* Required some delay to get PHY back to Run state */
             cy_rtos_delay_milliseconds(100);
 
-            while (Cy_EPHY_GetAutoNegotiationStatus(phy_obj) != true)
+            do
             {
                 cy_rtos_delay_milliseconds(100);
-            }
+                result = phy_callbacks->phy_get_auto_neg_status((uint8_t)eth_idx, &neg_status);
+                if(result != CY_RSLT_SUCCESS)
+                {
+                    break;
+                }
+            } while(neg_status == 0);
 
-            Cy_EPHY_getLinkPartnerCapabilities(phy_obj, &phyConfig);
-            ecm_phy_config->phy_speed = (cy_ecm_phy_speed_t)phyConfig.speed;
-            ecm_phy_config->mode = (cy_ecm_duplex_t)phyConfig.duplex;
+            result = phy_callbacks->phy_get_link_partner_cap((uint8_t)eth_idx, &duplex, &phy_speed);
+            if(result == CY_RSLT_SUCCESS)
+            {
+                ecm_phy_config->phy_speed = (cy_ecm_phy_speed_t)phy_speed;
+                ecm_phy_config->mode = (cy_ecm_duplex_t)duplex;
+            }
         }
 
         speed_sel = ecm_config_to_speed_sel(ecm_phy_config);
 
         /* Update the configuration based on user input */
-        eth_clock_config(speed_sel, ecm_phy_config->phy_speed);
+        eth_clock_config(eth_idx, speed_sel, ecm_phy_config->phy_speed);
 
         /** Initialize ENET MAC */
         eth_status = Cy_ETHIF_Init(reg_base, &stcENETConfig, &stcInterruptConfig);
@@ -616,7 +428,7 @@ static void init_phy_DP83867IR (ETH_Type *reg_base, cy_ecm_phy_config_t *ecm_phy
         if(!(ecm_phy_config->phy_speed == CY_ECM_PHY_SPEED_AUTO || ecm_phy_config->mode == CY_ECM_DUPLEX_AUTO))
         {
             /* Initialize the PHY */
-            Cy_EPHY_Init(phy_obj, phyRead, phyWrite);
+            (void)phy_callbacks->phy_init((uint8_t)eth_idx, reg_base);
         }
         is_driver_configured = true;
     }
@@ -624,74 +436,18 @@ static void init_phy_DP83867IR (ETH_Type *reg_base, cy_ecm_phy_config_t *ecm_phy
     stcInterruptCB.rxframecb  = cy_process_ethernet_data_cb;
 
     /* Reset the PHY */
-    Cy_EPHY_Reset(phy_obj);
-    Cy_ETHIF_PhyRegWrite(reg_base, 0x1F, 0x8000, PHY_ADDR); /* Ext-Reg CTRl: Perform a full reset, including all registers  */
-    cy_rtos_delay_milliseconds(30);    /* Required delay of 30 ms to get PHY back to Run state after reset */
+    (void)phy_callbacks->phy_reset((uint8_t)eth_idx, reg_base);
 
-    Cy_EPHY_Discover(phy_obj);
+    /* Discover */
+    (void)phy_callbacks->phy_discover((uint8_t)eth_idx);
 
-     /* Check for supported PHYs */
-    if (PHY_ID_DP83867IR != phy_obj->phyId)
-    {
-        cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_DEBUG, "Not supported physical ID \n" );
-        return;
-    }
-    phyConfig.duplex = ecm_phy_config->mode;
-    phyConfig.speed = ecm_phy_config->phy_speed;
+    duplex = ecm_phy_config->mode;
+    phy_speed = ecm_phy_config->phy_speed;
 
-    Cy_EPHY_Configure(phy_obj, &phyConfig);
+    (void)phy_callbacks->phy_configure((uint8_t)eth_idx, duplex, phy_speed);
 
     /* Enable PHY extended registers */
-    enable_phy_DP83867IR_extended_reg(reg_base, ecm_phy_config);
-
-}
-
-static void enable_phy_DP83867IR_extended_reg(ETH_Type *reg_base, cy_ecm_phy_config_t *ecm_phy_config)
-{
-    if(ecm_phy_config->phy_speed == CY_ECM_PHY_SPEED_100M)
-    {
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x10, 0x5028, PHY_ADDR); /** Disable auto negotiation for MDI/MDI-X **/
-    }
-    else if(ecm_phy_config->phy_speed == CY_ECM_PHY_SPEED_1000M || ecm_phy_config->phy_speed == CY_ECM_PHY_SPEED_AUTO)
-    {
-        uint32_t    u32ReadData;
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0D, 0x001F, PHY_ADDR);         /** Begin write access to the extended register     */
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0E, 0x0170, PHY_ADDR);
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0D, 0x401F, PHY_ADDR);
-        u32ReadData = Cy_ETHIF_PhyRegRead(reg_base, (uint8_t)0x0E, PHY_ADDR);
-        u32ReadData = u32ReadData & 0x0000;                                 /** Change the I/O impedance on the PHY    */
-        u32ReadData = u32ReadData | 0x010C;
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0E, u32ReadData, PHY_ADDR);         /** Enable clock from the PHY -> Route it to the MCU    */
-        u32ReadData = Cy_ETHIF_PhyRegRead(reg_base, (uint8_t)0x0E, PHY_ADDR);
-    }
-    else
-    {
-        /* Do nothing */
-    }
-
-    /** Disable RGMII by accessing the extended register set || Please read datasheet section 8.4.2.1 for the procedure in detail */
-    Cy_ETHIF_PhyRegWrite(reg_base, 0x0D, 0x001F, PHY_ADDR);                     /** REGCR  */
-    Cy_ETHIF_PhyRegWrite(reg_base, 0x0E, 0x0032, PHY_ADDR);                     /** ADDAR, 0x0032 RGMII config register  */
-    Cy_ETHIF_PhyRegWrite(reg_base, 0x0D, 0x401F, PHY_ADDR);                     /** REGCR; will force the next write/read access non-incremental  */
-
-    if(ecm_phy_config->interface_speed_type != CY_ECM_SPEED_TYPE_RGMII)
-    {
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0E, 0x0000, PHY_ADDR);                     /** Disable RGMII  */
-        Cy_ETHIF_PhyRegRead(reg_base, (uint8_t)0x0E, PHY_ADDR);       /** Read RGMII mode status  */
-    }
-    else
-    {
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0E, 0x00D3, PHY_ADDR);                     /** Enable Tx and RX clock delay in the RGMII configuration register  */
-
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0D, 0x001F, PHY_ADDR);                     /** REGCR  */
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0E, 0x0086, PHY_ADDR);                     /** ADDAR; 0x0086 delay config register  */
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0D, 0x401F, PHY_ADDR);                     /** REGCR; will force the next write/read access non-incremental  */
-        Cy_ETHIF_PhyRegWrite(reg_base, 0x0E, 0x0066, PHY_ADDR);                     /** Adjust Tx and Rx clock delays in the PHY  */
-    }/* EMAC_INTERFACE != EMAC_RGMII */
-
-    Cy_ETHIF_PhyRegWrite(reg_base, 0x1F, 0x4000, PHY_ADDR);         /** CTRL   */
-    cy_rtos_delay_milliseconds(30);/** Some more delay to get the PHY adapted to new interface */
-    Cy_ETHIF_PhyRegRead(reg_base, (uint8_t)0x11, PHY_ADDR);
+    (void)phy_callbacks->phy_enable_ext_reg(reg_base, phy_speed);
 }
 
 // EMAC END *******

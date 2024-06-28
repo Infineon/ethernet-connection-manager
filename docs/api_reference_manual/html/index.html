@@ -122,7 +122,7 @@ Quick Start</h1>
 Code Snippets</h1>
 <h2><a class="anchor" id="snip1"></a>
 Snippet 1: Init</h2>
-<p >This code snippet demonstrates the initialization ethernet driver, network stack and configuration structures required for creating an ECM client handle and and usage of the <a class="el" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5" title="Initializes the Ethernet physical driver, enables Ethernet port, and brings up the network stack.">cy_ecm_ethif_init()</a> API function.</p>
+<p >This code snippet demonstrates the initialization ethernet driver, network stack and configuration structures required for creating an ECM client handle and and usage of the <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380" title="Initializes the Ethernet physical driver, enables Ethernet port, and brings up the network stack.">cy_ecm_ethif_init()</a> API function.</p>
 <div class="fragment"><div class="line"> </div>
 <div class="line"><a class="code hl_typedef" href="group__group__ecm__typedefs.html#ga0bee3cc16897346fc3def995951dd645">cy_ecm_t</a> ecm_handle;</div>
 <div class="line"><a class="code hl_struct" href="structcy__ecm__phy__config__t.html">cy_ecm_phy_config_t</a> ecm_phy_config = {</div>
@@ -131,6 +131,18 @@ Snippet 1: Init</h2>
 <div class="line">        .phy_speed = <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga966f70273a22557a089e1287837d6e93ae432fa73ef0d3e188efb2a9bec5c3192">CY_ECM_PHY_SPEED_1000M</a></div>
 <div class="line">};</div>
 <div class="line"> </div>
+<div class="line"><a class="code hl_struct" href="structcy__ecm__phy__callbacks__t.html">cy_ecm_phy_callbacks_t</a> eth_phy_callbacks =</div>
+<div class="line">{</div>
+<div class="line">    .<a class="code hl_variable" href="structcy__ecm__phy__callbacks__t.html#a1849c72ea06d3ae6c02e4c118ddf322d">phy_init</a> = cy_eth_phy_init,</div>
+<div class="line">    .phy_configure = cy_eth_phy_configure,</div>
+<div class="line">    .phy_enable_ext_reg = cy_eth_phy_enable_ext_reg,</div>
+<div class="line">    .phy_discover = cy_eth_phy_discover,</div>
+<div class="line">    .phy_get_auto_neg_status = cy_eth_phy_get_auto_neg_status,</div>
+<div class="line">    .phy_get_link_partner_cap = cy_eth_phy_get_link_partner_cap,</div>
+<div class="line">    .phy_get_linkspeed = cy_eth_phy_get_linkspeed,</div>
+<div class="line">    .phy_get_linkstatus = cy_eth_phy_get_linkstatus,</div>
+<div class="line">    .phy_reset = cy_eth_phy_reset</div>
+<div class="line">};</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> snippet_ecm_ethernet_init( <span class="keywordtype">void</span> )</div>
 <div class="line">{</div>
@@ -145,22 +157,24 @@ Snippet 1: Init</h2>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">/* Initialize the Ethernet driver with provided configurations */</span></div>
-<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49abfaf0912e18c99d162fb23ebaddfcfa6">CY_ECM_INTERFACE_ETH0</a>, NULL, &amp;ecm_phy_config, &amp;ecm_handle );</div>
+<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2">CY_ECM_INTERFACE_ETH1</a>, &amp;eth_phy_callbacks, &amp;ecm_handle );</div>
 <div class="line">    <span class="keywordflow">if</span>( result != CY_RSLT_SUCCESS )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Failure path */</span></div>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">}</div>
-<div class="ttc" id="agroup__group__ecm__enums_html_gga4996f7bf858da646175429895490d072ae45c9f45e02b675afb8b9666598f4f18"><div class="ttname"><a href="group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072ae45c9f45e02b675afb8b9666598f4f18">CY_ECM_SPEED_TYPE_RGMII</a></div><div class="ttdeci">@ CY_ECM_SPEED_TYPE_RGMII</div><div class="ttdoc">Reduced Gigabit Media-Independent Interface (RGMII)</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:92</div></div>
-<div class="ttc" id="agroup__group__ecm__enums_html_gga590222ddd53f937ee092b018d402bd49abfaf0912e18c99d162fb23ebaddfcfa6"><div class="ttname"><a href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49abfaf0912e18c99d162fb23ebaddfcfa6">CY_ECM_INTERFACE_ETH0</a></div><div class="ttdeci">@ CY_ECM_INTERFACE_ETH0</div><div class="ttdoc">Interface for Ethernet port 0.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:47</div></div>
-<div class="ttc" id="agroup__group__ecm__enums_html_gga966f70273a22557a089e1287837d6e93ae432fa73ef0d3e188efb2a9bec5c3192"><div class="ttname"><a href="group__group__ecm__enums.html#gga966f70273a22557a089e1287837d6e93ae432fa73ef0d3e188efb2a9bec5c3192">CY_ECM_PHY_SPEED_1000M</a></div><div class="ttdeci">@ CY_ECM_PHY_SPEED_1000M</div><div class="ttdoc">1000 Mbps</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:83</div></div>
-<div class="ttc" id="agroup__group__ecm__enums_html_ggac17257bdd17fce7824f300e91fe0410ca29d9ea7089290c1b72843652984387ba"><div class="ttname"><a href="group__group__ecm__enums.html#ggac17257bdd17fce7824f300e91fe0410ca29d9ea7089290c1b72843652984387ba">CY_ECM_DUPLEX_FULL</a></div><div class="ttdeci">@ CY_ECM_DUPLEX_FULL</div><div class="ttdoc">Full duplex.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:74</div></div>
-<div class="ttc" id="agroup__group__ecm__functions_html_ga09e918eb95302d29400e7a359a83e4b5"><div class="ttname"><a href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a></div><div class="ttdeci">cy_rslt_t cy_ecm_ethif_init(cy_ecm_interface_t eth_idx, cy_ecm_mac_t *mac_addr, cy_ecm_phy_config_t *ecm_phy_config, cy_ecm_t *ecm_handle)</div><div class="ttdoc">Initializes the Ethernet physical driver, enables Ethernet port, and brings up the network stack.</div></div>
+<div class="ttc" id="agroup__group__ecm__enums_html_gga4996f7bf858da646175429895490d072ae45c9f45e02b675afb8b9666598f4f18"><div class="ttname"><a href="group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072ae45c9f45e02b675afb8b9666598f4f18">CY_ECM_SPEED_TYPE_RGMII</a></div><div class="ttdeci">@ CY_ECM_SPEED_TYPE_RGMII</div><div class="ttdoc">Reduced Gigabit Media-Independent Interface (RGMII)</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:94</div></div>
+<div class="ttc" id="agroup__group__ecm__enums_html_gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2"><div class="ttname"><a href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2">CY_ECM_INTERFACE_ETH1</a></div><div class="ttdeci">@ CY_ECM_INTERFACE_ETH1</div><div class="ttdoc">Interface for Ethernet port 1.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:49</div></div>
+<div class="ttc" id="agroup__group__ecm__enums_html_gga966f70273a22557a089e1287837d6e93ae432fa73ef0d3e188efb2a9bec5c3192"><div class="ttname"><a href="group__group__ecm__enums.html#gga966f70273a22557a089e1287837d6e93ae432fa73ef0d3e188efb2a9bec5c3192">CY_ECM_PHY_SPEED_1000M</a></div><div class="ttdeci">@ CY_ECM_PHY_SPEED_1000M</div><div class="ttdoc">1000 Mbps</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:84</div></div>
+<div class="ttc" id="agroup__group__ecm__enums_html_ggac17257bdd17fce7824f300e91fe0410ca29d9ea7089290c1b72843652984387ba"><div class="ttname"><a href="group__group__ecm__enums.html#ggac17257bdd17fce7824f300e91fe0410ca29d9ea7089290c1b72843652984387ba">CY_ECM_DUPLEX_FULL</a></div><div class="ttdeci">@ CY_ECM_DUPLEX_FULL</div><div class="ttdoc">Full duplex.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:75</div></div>
+<div class="ttc" id="agroup__group__ecm__functions_html_ga973e5b61d5f02f419b84ce5e9a6c2380"><div class="ttname"><a href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a></div><div class="ttdeci">cy_rslt_t cy_ecm_ethif_init(cy_ecm_interface_t eth_idx, cy_ecm_phy_callbacks_t *phy_callbacks, cy_ecm_t *ecm_handle)</div><div class="ttdoc">Initializes the Ethernet physical driver, enables Ethernet port, and brings up the network stack.</div></div>
 <div class="ttc" id="agroup__group__ecm__functions_html_ga9bb2ae7395196acd5304c5ad00038a6a"><div class="ttname"><a href="group__group__ecm__functions.html#ga9bb2ae7395196acd5304c5ad00038a6a">cy_ecm_init</a></div><div class="ttdeci">cy_rslt_t cy_ecm_init(void)</div><div class="ttdoc">Does general allocation and initialization of resources needed for the library.</div></div>
-<div class="ttc" id="agroup__group__ecm__typedefs_html_ga0bee3cc16897346fc3def995951dd645"><div class="ttname"><a href="group__group__ecm__typedefs.html#ga0bee3cc16897346fc3def995951dd645">cy_ecm_t</a></div><div class="ttdeci">void * cy_ecm_t</div><div class="ttdoc">Ethernet Connection Manager handle.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:125</div></div>
-<div class="ttc" id="astructcy__ecm__phy__config__t_html"><div class="ttname"><a href="structcy__ecm__phy__config__t.html">cy_ecm_phy_config_t</a></div><div class="ttdoc">Structure containing the configuration parameters to configure Ethernet PHY and MAC for data transfer...</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:167</div></div>
-<div class="ttc" id="astructcy__ecm__phy__config__t_html_a2d047a9c096e0be21f4d9e30ecc2a36b"><div class="ttname"><a href="structcy__ecm__phy__config__t.html#a2d047a9c096e0be21f4d9e30ecc2a36b">cy_ecm_phy_config_t::interface_speed_type</a></div><div class="ttdeci">cy_ecm_speed_type_t interface_speed_type</div><div class="ttdoc">Standard interface to be used for data transfer</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:168</div></div>
+<div class="ttc" id="agroup__group__ecm__typedefs_html_ga0bee3cc16897346fc3def995951dd645"><div class="ttname"><a href="group__group__ecm__typedefs.html#ga0bee3cc16897346fc3def995951dd645">cy_ecm_t</a></div><div class="ttdeci">void * cy_ecm_t</div><div class="ttdoc">Ethernet Connection Manager handle.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:126</div></div>
+<div class="ttc" id="astructcy__ecm__phy__callbacks__t_html"><div class="ttname"><a href="structcy__ecm__phy__callbacks__t.html">cy_ecm_phy_callbacks_t</a></div><div class="ttdoc">Structure used to pass the callback function implementation for PHY related operations.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:243</div></div>
+<div class="ttc" id="astructcy__ecm__phy__callbacks__t_html_a1849c72ea06d3ae6c02e4c118ddf322d"><div class="ttname"><a href="structcy__ecm__phy__callbacks__t.html#a1849c72ea06d3ae6c02e4c118ddf322d">cy_ecm_phy_callbacks_t::phy_init</a></div><div class="ttdeci">cy_ecm_phy_init phy_init</div><div class="ttdoc">Function pointer for Ethernet PHY Init.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:244</div></div>
+<div class="ttc" id="astructcy__ecm__phy__config__t_html"><div class="ttname"><a href="structcy__ecm__phy__config__t.html">cy_ecm_phy_config_t</a></div><div class="ttdoc">Structure containing the configuration parameters to configure Ethernet PHY and MAC for data transfer...</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:223</div></div>
+<div class="ttc" id="astructcy__ecm__phy__config__t_html_a2d047a9c096e0be21f4d9e30ecc2a36b"><div class="ttname"><a href="structcy__ecm__phy__config__t.html#a2d047a9c096e0be21f4d9e30ecc2a36b">cy_ecm_phy_config_t::interface_speed_type</a></div><div class="ttdeci">cy_ecm_speed_type_t interface_speed_type</div><div class="ttdoc">Standard interface to be used for data transfer</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:224</div></div>
 </div><!-- fragment --><h2><a class="anchor" id="snip2"></a>
 Snippet 2: Configure</h2>
 <p >This code snippet demonstrates how to configure the ethernet features like setting promiscuous mode, broadcast packet disabling, address filtering and and usage of the <a class="el" href="group__group__ecm__functions.html#ga13c35a4e6c210679a2dbeb5dee73884a" title="Enable or Disable the promiscuous mode.">cy_ecm_set_promiscuous_mode()</a>, cy_ecm_set_broadcast_disable() and <a class="el" href="group__group__ecm__functions.html#ga807f76585391a681916a8dc81a4dcda4" title="Filter the receiving packets with the configured source or destination filter address.">cy_ecm_set_filter_address()</a> API functions.</p>
@@ -182,7 +196,7 @@ Snippet 2: Configure</h2>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">/* Initialize the Ethernet driver with the provided configurations */</span></div>
-<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49abfaf0912e18c99d162fb23ebaddfcfa6">CY_ECM_INTERFACE_ETH0</a>, NULL, &amp;ecm_phy_config, &amp;ecm_handle );</div>
+<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2">CY_ECM_INTERFACE_ETH1</a>, &amp;eth_phy_callbacks, &amp;ecm_handle );</div>
 <div class="line">    <span class="keywordflow">if</span>( result != CY_RSLT_SUCCESS )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Failure path */</span></div>
@@ -221,15 +235,15 @@ Snippet 2: Configure</h2>
 <div class="line">        <span class="comment">/* Failure path */</span></div>
 <div class="line">    }</div>
 <div class="line">}</div>
-<div class="ttc" id="agroup__group__ecm__enums_html_gga3023c63e59bf47b91067fdb52dab874ca2efd0890a952c2636c4c49771eae0ad5"><div class="ttname"><a href="group__group__ecm__enums.html#gga3023c63e59bf47b91067fdb52dab874ca2efd0890a952c2636c4c49771eae0ad5">CY_ECM_FILTER_TYPE_SOURCE</a></div><div class="ttdeci">@ CY_ECM_FILTER_TYPE_SOURCE</div><div class="ttdoc">filter on the source address</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:100</div></div>
+<div class="ttc" id="agroup__group__ecm__enums_html_gga3023c63e59bf47b91067fdb52dab874ca2efd0890a952c2636c4c49771eae0ad5"><div class="ttname"><a href="group__group__ecm__enums.html#gga3023c63e59bf47b91067fdb52dab874ca2efd0890a952c2636c4c49771eae0ad5">CY_ECM_FILTER_TYPE_SOURCE</a></div><div class="ttdeci">@ CY_ECM_FILTER_TYPE_SOURCE</div><div class="ttdoc">filter on the source address</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:101</div></div>
 <div class="ttc" id="agroup__group__ecm__functions_html_ga13c35a4e6c210679a2dbeb5dee73884a"><div class="ttname"><a href="group__group__ecm__functions.html#ga13c35a4e6c210679a2dbeb5dee73884a">cy_ecm_set_promiscuous_mode</a></div><div class="ttdeci">cy_rslt_t cy_ecm_set_promiscuous_mode(cy_ecm_t ecm_handle, bool is_promiscuous_mode)</div><div class="ttdoc">Enable or Disable the promiscuous mode.</div></div>
 <div class="ttc" id="agroup__group__ecm__functions_html_ga807f76585391a681916a8dc81a4dcda4"><div class="ttname"><a href="group__group__ecm__functions.html#ga807f76585391a681916a8dc81a4dcda4">cy_ecm_set_filter_address</a></div><div class="ttdeci">cy_rslt_t cy_ecm_set_filter_address(cy_ecm_t ecm_handle, cy_ecm_filter_address_t *filter_address, uint8_t filter_address_count)</div><div class="ttdoc">Filter the receiving packets with the configured source or destination filter address.</div></div>
 <div class="ttc" id="agroup__group__ecm__functions_html_gaa1cd96de76219fb84660834f9e57a8bc"><div class="ttname"><a href="group__group__ecm__functions.html#gaa1cd96de76219fb84660834f9e57a8bc">cy_ecm_broadcast_disable</a></div><div class="ttdeci">cy_rslt_t cy_ecm_broadcast_disable(cy_ecm_t ecm_handle, bool is_broadcast_disable)</div><div class="ttdoc">Enable or Disable the incoming broadcast packets.</div></div>
-<div class="ttc" id="agroup__group__ecm__macros_html_ga43ff877491f0929ab58e1aac5386337a"><div class="ttname"><a href="group__group__ecm__macros.html#ga43ff877491f0929ab58e1aac5386337a">CY_ECM_MAC_ADDR_LEN</a></div><div class="ttdeci">#define CY_ECM_MAC_ADDR_LEN</div><div class="ttdoc">MAC address length</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:29</div></div>
-<div class="ttc" id="astructcy__ecm__filter__address__t_html"><div class="ttname"><a href="structcy__ecm__filter__address__t.html">cy_ecm_filter_address_t</a></div><div class="ttdoc">Structure containing the configuration parameters to configure Ethernet PHY and MAC to filter the add...</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:177</div></div>
-<div class="ttc" id="astructcy__ecm__filter__address__t_html_a4ca9a6d86b33c25e13f979565640970e"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#a4ca9a6d86b33c25e13f979565640970e">cy_ecm_filter_address_t::filter_addr</a></div><div class="ttdeci">uint8_t filter_addr[CY_ECM_MAC_ADDR_LEN]</div><div class="ttdoc">Address to be filtered.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:179</div></div>
-<div class="ttc" id="astructcy__ecm__filter__address__t_html_a7809135ec14d1f44ee2abbd6169e6521"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#a7809135ec14d1f44ee2abbd6169e6521">cy_ecm_filter_address_t::ignoreBytes</a></div><div class="ttdeci">uint8_t ignoreBytes</div><div class="ttdoc">For example, ignoreBytes = 0x01 implies that the first byte received should not be compared.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:180</div></div>
-<div class="ttc" id="astructcy__ecm__filter__address__t_html_aa99b2552a01757b8e882c12a97c2c282"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#aa99b2552a01757b8e882c12a97c2c282">cy_ecm_filter_address_t::filter_type</a></div><div class="ttdeci">cy_ecm_filter_type_t filter_type</div><div class="ttdoc">Type of address to be filtered.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:178</div></div>
+<div class="ttc" id="agroup__group__ecm__macros_html_ga43ff877491f0929ab58e1aac5386337a"><div class="ttname"><a href="group__group__ecm__macros.html#ga43ff877491f0929ab58e1aac5386337a">CY_ECM_MAC_ADDR_LEN</a></div><div class="ttdeci">#define CY_ECM_MAC_ADDR_LEN</div><div class="ttdoc">MAC address length</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:30</div></div>
+<div class="ttc" id="astructcy__ecm__filter__address__t_html"><div class="ttname"><a href="structcy__ecm__filter__address__t.html">cy_ecm_filter_address_t</a></div><div class="ttdoc">Structure containing the configuration parameters to configure Ethernet PHY and MAC to filter the add...</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:233</div></div>
+<div class="ttc" id="astructcy__ecm__filter__address__t_html_a4ca9a6d86b33c25e13f979565640970e"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#a4ca9a6d86b33c25e13f979565640970e">cy_ecm_filter_address_t::filter_addr</a></div><div class="ttdeci">uint8_t filter_addr[CY_ECM_MAC_ADDR_LEN]</div><div class="ttdoc">Address to be filtered.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:235</div></div>
+<div class="ttc" id="astructcy__ecm__filter__address__t_html_a7809135ec14d1f44ee2abbd6169e6521"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#a7809135ec14d1f44ee2abbd6169e6521">cy_ecm_filter_address_t::ignoreBytes</a></div><div class="ttdeci">uint8_t ignoreBytes</div><div class="ttdoc">For example, ignoreBytes = 0x01 implies that the first byte received should not be compared.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:236</div></div>
+<div class="ttc" id="astructcy__ecm__filter__address__t_html_aa99b2552a01757b8e882c12a97c2c282"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#aa99b2552a01757b8e882c12a97c2c282">cy_ecm_filter_address_t::filter_type</a></div><div class="ttdeci">cy_ecm_filter_type_t filter_type</div><div class="ttdoc">Type of address to be filtered.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:234</div></div>
 </div><!-- fragment --><h2><a class="anchor" id="snip3"></a>
 Snippet 3: Connect</h2>
 <p >This code snippet demonstrates how to establish a connection to the ethernet and bring network up using the <a class="el" href="group__group__ecm__functions.html#ga47943ffea422b5e0581505e20f4f226d" title="Brings up the interface and configure to corresponding Ethernet port.">cy_ecm_connect()</a> API function.</p>
@@ -249,7 +263,7 @@ Snippet 3: Connect</h2>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">/* Initialize the Ethernet driver with the provided configurations */</span></div>
-<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49abfaf0912e18c99d162fb23ebaddfcfa6">CY_ECM_INTERFACE_ETH0</a>, NULL, &amp;ecm_phy_config, &amp;ecm_handle );</div>
+<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2">CY_ECM_INTERFACE_ETH1</a>, &amp;eth_phy_callbacks, &amp;ecm_handle );</div>
 <div class="line">    <span class="keywordflow">if</span>( result != CY_RSLT_SUCCESS )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Failure path */</span></div>
@@ -263,7 +277,7 @@ Snippet 3: Connect</h2>
 <div class="line">    }</div>
 <div class="line">}</div>
 <div class="ttc" id="agroup__group__ecm__functions_html_ga47943ffea422b5e0581505e20f4f226d"><div class="ttname"><a href="group__group__ecm__functions.html#ga47943ffea422b5e0581505e20f4f226d">cy_ecm_connect</a></div><div class="ttdeci">cy_rslt_t cy_ecm_connect(cy_ecm_t ecm_handle, cy_ecm_ip_setting_t *static_ip_addr, cy_ecm_ip_address_t *ip_addr)</div><div class="ttdoc">Brings up the interface and configure to corresponding Ethernet port.</div></div>
-<div class="ttc" id="astructcy__ecm__ip__address__t_html"><div class="ttname"><a href="structcy__ecm__ip__address__t.html">cy_ecm_ip_address_t</a></div><div class="ttdoc">Structure used to set or receive the IP address information to or from the underlying network stack.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:144</div></div>
+<div class="ttc" id="astructcy__ecm__ip__address__t_html"><div class="ttname"><a href="structcy__ecm__ip__address__t.html">cy_ecm_ip_address_t</a></div><div class="ttdoc">Structure used to set or receive the IP address information to or from the underlying network stack.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:200</div></div>
 </div><!-- fragment --><h2><a class="anchor" id="snip4"></a>
 Snippet 4: Get IP address</h2>
 <p >This code snippet demonstrates how to establish a connection to the ethernet and get IP address using the <a class="el" href="group__group__ecm__functions.html#ga0d24d3738cf80a768df1a28208e2b2b8" title="Retrieves the IPv4 address of the given interface.">cy_ecm_get_ip_address()</a> API function.</p>
@@ -283,7 +297,7 @@ Snippet 4: Get IP address</h2>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">/* Initialize the Ethernet driver with the provided configurations */</span></div>
-<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49abfaf0912e18c99d162fb23ebaddfcfa6">CY_ECM_INTERFACE_ETH0</a>, NULL, &amp;ecm_phy_config, &amp;ecm_handle );</div>
+<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2">CY_ECM_INTERFACE_ETH1</a>, &amp;eth_phy_callbacks, &amp;ecm_handle );</div>
 <div class="line">    <span class="keywordflow">if</span>( result != CY_RSLT_SUCCESS )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Failure path */</span></div>
@@ -339,7 +353,7 @@ Snippet 5: ping</h2>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">/* Initialize the Ethernet driver with the provided configurations */</span></div>
-<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49abfaf0912e18c99d162fb23ebaddfcfa6">CY_ECM_INTERFACE_ETH0</a>, NULL, &amp;ecm_phy_config, &amp;ecm_handle );</div>
+<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2">CY_ECM_INTERFACE_ETH1</a>, &amp;eth_phy_callbacks, &amp;ecm_handle );</div>
 <div class="line">    <span class="keywordflow">if</span>( result != CY_RSLT_SUCCESS )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Failure path */</span></div>
@@ -385,7 +399,7 @@ Snippet 6: Deinit</h2>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">/* Initialize the Ethernet driver with the provided configurations */</span></div>
-<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga09e918eb95302d29400e7a359a83e4b5">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49abfaf0912e18c99d162fb23ebaddfcfa6">CY_ECM_INTERFACE_ETH0</a>, NULL, &amp;ecm_phy_config, &amp;ecm_handle );</div>
+<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>( <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2">CY_ECM_INTERFACE_ETH1</a>, &amp;eth_phy_callbacks, &amp;ecm_handle );</div>
 <div class="line">    <span class="keywordflow">if</span>( result != CY_RSLT_SUCCESS )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Failure path */</span></div>
