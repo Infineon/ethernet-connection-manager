@@ -247,13 +247,25 @@ static void eth_clock_config(cy_ecm_interface_t eth_idx, cy_en_ethif_speed_sel_t
     }
 
     if(phy_speed == CY_ECM_PHY_SPEED_10M)
+    {
+#if (defined (CYCFG_XMC7100_DEFINED) && (CYCFG_XMC7100_DEFINED == 1u))
+        stcWrapperConfig.u8RefClkDiv = 1;                          /** RefClk: 2.5 MHz; divide Refclock by 1 to have a 25-MHz Tx clock  */
+#else
         stcWrapperConfig.u8RefClkDiv = 10;                         /** RefClk: 25 MHz; divide Refclock by 10 to have a 2.5-MHz Tx clock  */
+#endif
+    }
     else if(phy_speed == CY_ECM_PHY_SPEED_100M)
+    {
         stcWrapperConfig.u8RefClkDiv = 1;                          /** RefClk: 25 MHz; divide Refclock by 1 to have a 25-MHz Tx clock  */
+    }
     else if(phy_speed == CY_ECM_PHY_SPEED_1000M)
+    {
         stcWrapperConfig.u8RefClkDiv = 1;                          /** RefClk: 25 MHz; divide Refclock by 1 to have a 25-MHz Tx clock  */
+    }
     else /*(phy_speed == CY_ECM_PHY_SPEED_1000M)*/
+    {
         stcWrapperConfig.u8RefClkDiv = 1;                          /** RefClk: 125 MHz; divide Refclock by 1 to have a 125-MHz Tx clock || Although only relevant in RGMII/GMII modes */
+    }
 
     return;
 }

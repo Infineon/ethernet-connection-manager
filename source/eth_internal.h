@@ -54,6 +54,15 @@ extern int eth_index_internal;
  /* After hardware initialization, max wait time to get the physical link up */
 #define MAX_WAIT_ETHERNET_PHY_STATUS          (10000)
 
+/**
+ * Structure containing the configuration parameters to configure Ethernet PHY and MAC for data transfer handling
+ */
+typedef struct
+{
+    cy_ecm_speed_type_t interface_speed_type; /**< Standard interface to be used for data transfer  */
+    cy_ecm_phy_speed_t phy_speed;             /**< Physical transfer speed */
+    cy_ecm_duplex_t mode;                     /**< Transfer mode */
+} cy_ecm_phy_config_t;
 
 cy_rslt_t  cy_eth_driver_initialization(cy_ecm_interface_t eth_idx, ETH_Type *eth_type, cy_ecm_phy_config_t *ecm_phy_config, cy_ecm_phy_callbacks_t *phy_callbacks);
 void deregister_cb(ETH_Type *reg_base);

@@ -13,6 +13,10 @@ See the [README.md](./README.md) for a complete description of the [ethernet con
 
 ## Changelog
 
+### v2.1.0
+
+- Added Network Interface settings, IP settings, Protocol settings, Memory settings and PHY pin configuration settings in the ModusToolbox&trade; Device Configurator.
+
 ### v2.0.0
 
 - Removed hardcoded Ethernet PHY operations from ECM and restructured to support multiple Ethernet PHY chips.

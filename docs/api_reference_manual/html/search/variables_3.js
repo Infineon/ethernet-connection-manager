@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mode_0',['mode',['../structcy__ecm__phy__config__t.html#aa8ef0a24d31b50d8a76e01580f0092e3',1,'cy_ecm_phy_config_t']]]
+  ['netmask_0',['netmask',['../structcy__ecm__ip__setting__t.html#a523a0821e0a87b0738518a669991ffda',1,'cy_ecm_ip_setting_t']]]
 ];

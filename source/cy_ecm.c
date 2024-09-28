@@ -895,7 +895,7 @@ cy_rslt_t cy_ecm_connect( cy_ecm_t ecm_handle, cy_ecm_ip_setting_t *ecm_static_i
         goto exit;
     }
 
-    //Check whether the connection is already established
+    /* Check whether the connection is already established */
     if( ecm_obj->network_up == true )
     {
         cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\n ECM library already connected \n" );
@@ -915,7 +915,7 @@ cy_rslt_t cy_ecm_connect( cy_ecm_t ecm_handle, cy_ecm_ip_setting_t *ecm_static_i
         }
         else
         {
-            // TO DO : Copy the IPv6 address
+            /* TO DO : Copy the IPv6 address */
             cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "\n Static IP address not supported\n" );
             result = CY_RSLT_ECM_STATIC_IP_NOT_SUPPORTED;
             goto exit;

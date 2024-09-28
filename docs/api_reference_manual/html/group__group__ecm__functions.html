@@ -244,7 +244,7 @@ Functions</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd><ol type="1">
 <li>Ethernet Connection Manager library returns error as required ethernet phy driver callbacks functions were not passed with this API.</li>
 <li>As a part of <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a>, Ethernet driver initialization is called, which does GPIO and clock divider settings for the given physical configurations. But, Ethernet driver deinitialization is not available to clear these clock and GPIO settings.Hence, <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> cannot be called more than once in a single session, with different physical configurations.</li>
-<li>If either speed or duplex mode is set to AUTO, the auto-negotiation will be enabled. Application can call <a class="el" href="group__group__ecm__functions.html#ga080c58b86b864ab849d94ad59fe61945">cy_ecm_get_link_speed</a>, to check the speed and duplex mode configured.</li>
+<li>If either speed or duplex mode is set to AUTO, the Autonegotiation will be enabled. Application can call <a class="el" href="group__group__ecm__functions.html#ga080c58b86b864ab849d94ad59fe61945">cy_ecm_get_link_speed</a>, to check the speed and duplex mode configured.</li>
 </ol>
 </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -432,6 +432,7 @@ Functions</h2></td></tr>
 
 <p>Brings up the interface and configure to corresponding Ethernet port. </p>
 <p >This function brings up the network interface. This function should be called after calling the <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> ECM API.</p>
+<dl class="section note"><dt>Note</dt><dd>If DHCP or static IP is configured from device configurator, then the parameter static_ip_addr will be ignored.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">ecm_handle</td><td>: ECM handle created using <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a> </td></tr>

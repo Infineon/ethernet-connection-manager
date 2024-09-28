@@ -90,7 +90,6 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <h1><a class="anchor" id="section_features"></a>
 Features and Functionality</h1>
 <p >The current implementation has the following features and functionality:</p><ul>
-<li>Supports reduced gigabit media-independent interface (RGMII) mode.</li>
 <li>Supports upto 4 source and destination address filtering.</li>
 <li>Supports for enabling and disabling of receiving the broadcast messages.</li>
 <li>Supports for enable/disable of promiscous mode.</li>
@@ -102,17 +101,64 @@ Features and Functionality</h1>
 <h1><a class="anchor" id="section_supported_platforms"></a>
 Supported Platforms</h1>
 <p >This library and its features are supported on the following Infineon platforms:</p><ul>
-<li><a href="https://www.infineon.com/KIT_XMC72_EVK">XMC7200D-E272K8384 kit (KIT-XMC72-EVK)</a></li>
+<li><a href="https://www.infineon.com/KIT_XMC72_EVK">XMC7200 Evaluation Kit (KIT_XMC72_EVK)</a></li>
 </ul>
 <h1><a class="anchor" id="section_integration"></a>
 Quick Start</h1>
-<ul>
-<li>To use ethernet-connection-manager library on FreeRTOS, lwIP, and Mbed TLS combination, the application should pull <a href="https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls">ethernet-core-freertos-lwip-mbedtls</a> library which will internally pull secure-sockets, ethernet-connection-manager, FreeRTOS, lwIP, Mbed TLS and other dependent modules. To pull ethernet-core-freertos-lwip-mbedtls create the following *.mtb* file in deps folder.<ul>
-<li>ethernet-core-freertos-lwip-mbedtls.mtb: <a href="https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls#latest-v1.X#$$ASSET_REPO$$/ethernet-core-freertos-lwip-mbedtls/latest-v1.X">https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls#latest-v1.X#$$ASSET_REPO$$/ethernet-core-freertos-lwip-mbedtls/latest-v1.X</a></li>
+<p >Follow below steps to enable and configure ethernet,</p><ul>
+<li>Application should pull <a href="https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls">ethernet-core-freertos-lwip-mbedtls</a> library which will internally pull secure-sockets, ethernet-connection-manager, FreeRTOS, lwIP, Mbed TLS and other dependent modules. To pull ethernet-core-freertos-lwip-mbedtls create the following *.mtb* file in deps folder.<ul>
+<li>ethernet-core-freertos-lwip-mbedtls.mtb: <a href="https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls#latest-v2.X#$$ASSET_REPO$$/ethernet-core-freertos-lwip-mbedtls/latest-v2.X">https://github.com/Infineon/ethernet-core-freertos-lwip-mbedtls#latest-v2.X#$$ASSET_REPO$$/ethernet-core-freertos-lwip-mbedtls/latest-v2.X</a></li>
 </ul>
 </li>
 </ul>
-<p >The ECM library disables all the debug log messages by default. To enable log messages, the application must perform the following:</p><ol type="1">
+<p >To pull ethernet-phy-driver create the following *.mtb* file in deps folder.</p><ul>
+<li>ethernet-phy-driver.mtb: <a href="https://github.com/Infineon/ethernet-phy-driver#latest-v1.X#$$ASSET_REPO$$/ethernet-phy-driver/latest-v1.X">https://github.com/Infineon/ethernet-phy-driver#latest-v1.X#$$ASSET_REPO$$/ethernet-phy-driver/latest-v1.X</a></li>
+</ul>
+<p >Provide PHY operation callback functions to Ethernet Connection Manager by invoking <em>cy_ecm_ethif_init</em> API function. Refer <a href="https://Infineon.github.io/ethernet-phy-driver/api_reference_manual/html/index.html">Ethernet PHY Driver API documentation</a> for API documentation of <em>cy_ecm_ethif_init</em> API function.</p>
+<p >Ethernet is not a deep sleep enabled IP, hence system should always be in active mode. Open design.modus file and do the following configuration settings in the ModusToolbox&trade; Device Configurator.</p><ul>
+<li>Switch to the "System" tab.</li>
+<li>Select Resource-&gt;Power.</li>
+<li>In "RTOS" section, "System Idle Power Mode" should be set to "Active" from the drop-down.</li>
+<li>Save the configuration to generate the necessary code.</li>
+</ul>
+<p >To enable ethernet configurations on <a href="https://www.infineon.com/KIT_XMC72_EVK">XMC7200 Evaluation Kit (KIT_XMC72_EVK)</a>, open design.modus file and do the following configuration settings in the ModusToolbox&trade; Device Configurator.</p><ul>
+<li>Switch to the "Peripherals" tab.</li>
+<li>Select Communication-&gt;"Ethernet 1" for KIT_XMC72_EVK device.</li>
+<li>In "Ethernet - Parameters" pane, configure interface type "PHY Interconnect" to "RGMII" from the drop-down.</li>
+<li>Configure PHY driver "PHY device" to "DP83867IR" from the drop-down.</li>
+<li>Enable/Disable "Autonegotiation" (default is enable).</li>
+<li>Configure "PHY speed" (10/100/1000 Mbits/sec) based on the device.</li>
+<li>Configure "PHY Duplex mode" (default Full Duplex).</li>
+<li><b>NOTE:</b> "PHY speed" and "PHY Duplex Mode" options are visible only when the "Autonegotiation" is disabled.</li>
+<li>Configure "Mac Address".</li>
+<li>Enable "Promiscuous mode" (default is disable).</li>
+<li>Enable "Accept Broadcast Frames" (default is enable).</li>
+<li>Configure "Mac Reference Clock" (default is External clk).</li>
+<li>Configure "Nvic Mux Interrupt number". This will be enabled, if devices have separate Nvic interrupt lines. (default is 3).</li>
+<li>Configure static IP or use DHCP (default is use DHCP).</li>
+<li>To configure pin connections, refer "Quick Start" section of <a href="https://Infineon.github.io/ethernet-phy-driver/README.md">Ethernet PHY Driver readme documentation</a></li>
+<li>Save the configuration to generate the necessary code.</li>
+</ul>
+<p >To enable ethernet configurations on <a href="https://www.infineon.com/KIT_XMC71_EVK_LITE_V1">XMC7100 Evaluation Kit (KIT_XMC71_EVK_LITE_V1)</a>, open design.modus file and do the following configuration settings in the ModusToolbox&trade; Device Configurator.</p><ul>
+<li>Switch to the "Peripherals" tab.</li>
+<li>Select Communication-&gt;"Ethernet 1" for KIT_XMC71_EVK_LITE_V1 device.</li>
+<li>In "Ethernet - Parameters" pane, configure interface type "PHY Interconnect" to "RMII" from the drop-down.</li>
+<li>Configure PHY driver "PHY device" to "DP83825I" from the drop-down.</li>
+<li>Enable/Disable "Autonegotiation" (default is enable).</li>
+<li>Configure "PHY speed" (10/100 Mbits/sec) based on the device.</li>
+<li>Configure "PHY Duplex mode" (default Full Duplex).</li>
+<li><b>NOTE:</b> "PHY speed" and "PHY Duplex Mode" options are visible only when the "Autonegotiation" is disabled.</li>
+<li>Configure "Mac Address".</li>
+<li>Enable "Promiscuous mode" (default is disable).</li>
+<li>Enable "Accept Broadcast Frames" (default is enable).</li>
+<li>Configure "Mac Reference Clock" (default is External clk).</li>
+<li>Configure "Nvic Mux Interrupt number". This will be enabled, if devices have separate Nvic interrupt lines. (default is 3).</li>
+<li>Configure static IP or use DHCP (default is use DHCP).</li>
+<li>To configure pin connections, refer "Quick Start" section of <a href="https://Infineon.github.io/ethernet-phy-driver/README.md">Ethernet PHY Driver readme documentation</a></li>
+<li>Save the configuration to generate the necessary code.</li>
+</ul>
+<p >Add the CY_DISABLE_XMC7000_DATA_CACHE macro to the DEFINES in the code example's Makefile to disable data cache. The Makefile entry would look like as follows: </p><div class="fragment"><div class="line">DEFINES+=CY_DISABLE_XMC7000_DATA_CACHE</div>
+</div><!-- fragment --><p >The ECM library disables all the debug log messages by default. To enable log messages, the application must perform the following:</p><ol type="1">
 <li>Add the <code>ENABLE_ECM_LOGS</code> macro to the <em>DEFINES</em> in the code example's Makefile. The Makefile entry would look like as follows: <div class="fragment"><div class="line">DEFINES+=ENABLE_ECM_LOGS</div>
 </div><!-- fragment --></li>
 <li>Call the <code>cy_log_init()</code> function provided by the <em>cy-log</em> module. cy-log is part of the <em>connectivity-utilities</em> library. See *<a href="* https://Infineon.github.io/connectivity-utilities/api_reference_manual/html/group__logging__utils.html">connectivity-utilities library API documentation</a>. Add the CYBSP_ETHERNET_CAPABLE build configuration to enable the ethernet functionality. The Makefile entry should look like as follows: <div class="fragment"><div class="line">DEFINES+=CYBSP_ETHERNET_CAPABLE</div>
@@ -125,11 +171,6 @@ Snippet 1: Init</h2>
 <p >This code snippet demonstrates the initialization ethernet driver, network stack and configuration structures required for creating an ECM client handle and and usage of the <a class="el" href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380" title="Initializes the Ethernet physical driver, enables Ethernet port, and brings up the network stack.">cy_ecm_ethif_init()</a> API function.</p>
 <div class="fragment"><div class="line"> </div>
 <div class="line"><a class="code hl_typedef" href="group__group__ecm__typedefs.html#ga0bee3cc16897346fc3def995951dd645">cy_ecm_t</a> ecm_handle;</div>
-<div class="line"><a class="code hl_struct" href="structcy__ecm__phy__config__t.html">cy_ecm_phy_config_t</a> ecm_phy_config = {</div>
-<div class="line">        .<a class="code hl_variable" href="structcy__ecm__phy__config__t.html#a2d047a9c096e0be21f4d9e30ecc2a36b">interface_speed_type</a> = <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072ae45c9f45e02b675afb8b9666598f4f18">CY_ECM_SPEED_TYPE_RGMII</a>,</div>
-<div class="line">        .mode = <a class="code hl_enumvalue" href="group__group__ecm__enums.html#ggac17257bdd17fce7824f300e91fe0410ca29d9ea7089290c1b72843652984387ba">CY_ECM_DUPLEX_FULL</a>,</div>
-<div class="line">        .phy_speed = <a class="code hl_enumvalue" href="group__group__ecm__enums.html#gga966f70273a22557a089e1287837d6e93ae432fa73ef0d3e188efb2a9bec5c3192">CY_ECM_PHY_SPEED_1000M</a></div>
-<div class="line">};</div>
 <div class="line"> </div>
 <div class="line"><a class="code hl_struct" href="structcy__ecm__phy__callbacks__t.html">cy_ecm_phy_callbacks_t</a> eth_phy_callbacks =</div>
 <div class="line">{</div>
@@ -164,17 +205,12 @@ Snippet 1: Init</h2>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">}</div>
-<div class="ttc" id="agroup__group__ecm__enums_html_gga4996f7bf858da646175429895490d072ae45c9f45e02b675afb8b9666598f4f18"><div class="ttname"><a href="group__group__ecm__enums.html#gga4996f7bf858da646175429895490d072ae45c9f45e02b675afb8b9666598f4f18">CY_ECM_SPEED_TYPE_RGMII</a></div><div class="ttdeci">@ CY_ECM_SPEED_TYPE_RGMII</div><div class="ttdoc">Reduced Gigabit Media-Independent Interface (RGMII)</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:94</div></div>
 <div class="ttc" id="agroup__group__ecm__enums_html_gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2"><div class="ttname"><a href="group__group__ecm__enums.html#gga590222ddd53f937ee092b018d402bd49a72311faf45ecb57369a56716b0b380a2">CY_ECM_INTERFACE_ETH1</a></div><div class="ttdeci">@ CY_ECM_INTERFACE_ETH1</div><div class="ttdoc">Interface for Ethernet port 1.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:49</div></div>
-<div class="ttc" id="agroup__group__ecm__enums_html_gga966f70273a22557a089e1287837d6e93ae432fa73ef0d3e188efb2a9bec5c3192"><div class="ttname"><a href="group__group__ecm__enums.html#gga966f70273a22557a089e1287837d6e93ae432fa73ef0d3e188efb2a9bec5c3192">CY_ECM_PHY_SPEED_1000M</a></div><div class="ttdeci">@ CY_ECM_PHY_SPEED_1000M</div><div class="ttdoc">1000 Mbps</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:84</div></div>
-<div class="ttc" id="agroup__group__ecm__enums_html_ggac17257bdd17fce7824f300e91fe0410ca29d9ea7089290c1b72843652984387ba"><div class="ttname"><a href="group__group__ecm__enums.html#ggac17257bdd17fce7824f300e91fe0410ca29d9ea7089290c1b72843652984387ba">CY_ECM_DUPLEX_FULL</a></div><div class="ttdeci">@ CY_ECM_DUPLEX_FULL</div><div class="ttdoc">Full duplex.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:75</div></div>
 <div class="ttc" id="agroup__group__ecm__functions_html_ga973e5b61d5f02f419b84ce5e9a6c2380"><div class="ttname"><a href="group__group__ecm__functions.html#ga973e5b61d5f02f419b84ce5e9a6c2380">cy_ecm_ethif_init</a></div><div class="ttdeci">cy_rslt_t cy_ecm_ethif_init(cy_ecm_interface_t eth_idx, cy_ecm_phy_callbacks_t *phy_callbacks, cy_ecm_t *ecm_handle)</div><div class="ttdoc">Initializes the Ethernet physical driver, enables Ethernet port, and brings up the network stack.</div></div>
 <div class="ttc" id="agroup__group__ecm__functions_html_ga9bb2ae7395196acd5304c5ad00038a6a"><div class="ttname"><a href="group__group__ecm__functions.html#ga9bb2ae7395196acd5304c5ad00038a6a">cy_ecm_init</a></div><div class="ttdeci">cy_rslt_t cy_ecm_init(void)</div><div class="ttdoc">Does general allocation and initialization of resources needed for the library.</div></div>
 <div class="ttc" id="agroup__group__ecm__typedefs_html_ga0bee3cc16897346fc3def995951dd645"><div class="ttname"><a href="group__group__ecm__typedefs.html#ga0bee3cc16897346fc3def995951dd645">cy_ecm_t</a></div><div class="ttdeci">void * cy_ecm_t</div><div class="ttdoc">Ethernet Connection Manager handle.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:126</div></div>
-<div class="ttc" id="astructcy__ecm__phy__callbacks__t_html"><div class="ttname"><a href="structcy__ecm__phy__callbacks__t.html">cy_ecm_phy_callbacks_t</a></div><div class="ttdoc">Structure used to pass the callback function implementation for PHY related operations.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:243</div></div>
-<div class="ttc" id="astructcy__ecm__phy__callbacks__t_html_a1849c72ea06d3ae6c02e4c118ddf322d"><div class="ttname"><a href="structcy__ecm__phy__callbacks__t.html#a1849c72ea06d3ae6c02e4c118ddf322d">cy_ecm_phy_callbacks_t::phy_init</a></div><div class="ttdeci">cy_ecm_phy_init phy_init</div><div class="ttdoc">Function pointer for Ethernet PHY Init.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:244</div></div>
-<div class="ttc" id="astructcy__ecm__phy__config__t_html"><div class="ttname"><a href="structcy__ecm__phy__config__t.html">cy_ecm_phy_config_t</a></div><div class="ttdoc">Structure containing the configuration parameters to configure Ethernet PHY and MAC for data transfer...</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:223</div></div>
-<div class="ttc" id="astructcy__ecm__phy__config__t_html_a2d047a9c096e0be21f4d9e30ecc2a36b"><div class="ttname"><a href="structcy__ecm__phy__config__t.html#a2d047a9c096e0be21f4d9e30ecc2a36b">cy_ecm_phy_config_t::interface_speed_type</a></div><div class="ttdeci">cy_ecm_speed_type_t interface_speed_type</div><div class="ttdoc">Standard interface to be used for data transfer</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:224</div></div>
+<div class="ttc" id="astructcy__ecm__phy__callbacks__t_html"><div class="ttname"><a href="structcy__ecm__phy__callbacks__t.html">cy_ecm_phy_callbacks_t</a></div><div class="ttdoc">Structure used to pass the callback function implementation for PHY related operations.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:233</div></div>
+<div class="ttc" id="astructcy__ecm__phy__callbacks__t_html_a1849c72ea06d3ae6c02e4c118ddf322d"><div class="ttname"><a href="structcy__ecm__phy__callbacks__t.html#a1849c72ea06d3ae6c02e4c118ddf322d">cy_ecm_phy_callbacks_t::phy_init</a></div><div class="ttdeci">cy_ecm_phy_init phy_init</div><div class="ttdoc">Function pointer for Ethernet PHY Init.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:234</div></div>
 </div><!-- fragment --><h2><a class="anchor" id="snip2"></a>
 Snippet 2: Configure</h2>
 <p >This code snippet demonstrates how to configure the ethernet features like setting promiscuous mode, broadcast packet disabling, address filtering and and usage of the <a class="el" href="group__group__ecm__functions.html#ga13c35a4e6c210679a2dbeb5dee73884a" title="Enable or Disable the promiscuous mode.">cy_ecm_set_promiscuous_mode()</a>, cy_ecm_set_broadcast_disable() and <a class="el" href="group__group__ecm__functions.html#ga807f76585391a681916a8dc81a4dcda4" title="Filter the receiving packets with the configured source or destination filter address.">cy_ecm_set_filter_address()</a> API functions.</p>
@@ -184,7 +220,6 @@ Snippet 2: Configure</h2>
 <div class="line">    <span class="comment">/* Status variables for various operations */</span></div>
 <div class="line">    cy_rslt_t result = CY_RSLT_SUCCESS;</div>
 <div class="line">    <span class="keywordtype">bool</span> is_promiscuous_mode = <span class="keyword">true</span>;</div>
-<div class="line">    <span class="keywordtype">bool</span> is_broadcast_disable = <span class="keyword">true</span>;</div>
 <div class="line">    uint8_t filter_address_count;</div>
 <div class="line">    <a class="code hl_struct" href="structcy__ecm__filter__address__t.html">cy_ecm_filter_address_t</a> filter_address;</div>
 <div class="line"> </div>
@@ -210,14 +245,14 @@ Snippet 2: Configure</h2>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">/* Configure the Ethernet driver to enable broadcast frames to be received */</span></div>
-<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#gaa1cd96de76219fb84660834f9e57a8bc">cy_ecm_broadcast_disable</a>( ecm_handle, is_broadcast_disable );</div>
+<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#gaa1cd96de76219fb84660834f9e57a8bc">cy_ecm_broadcast_disable</a>( ecm_handle, <span class="keyword">false</span> );</div>
 <div class="line">    <span class="keywordflow">if</span>( result != CY_RSLT_SUCCESS )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Failure path */</span></div>
 <div class="line">    }</div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">/* Configure the Ethernet driver to disable all the incoming broadcast messages */</span></div>
-<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#gaa1cd96de76219fb84660834f9e57a8bc">cy_ecm_broadcast_disable</a>( ecm_handle, is_broadcast_disable );</div>
+<div class="line">    result =  <a class="code hl_function" href="group__group__ecm__functions.html#gaa1cd96de76219fb84660834f9e57a8bc">cy_ecm_broadcast_disable</a>( ecm_handle, <span class="keyword">true</span> );</div>
 <div class="line">    <span class="keywordflow">if</span>( result != CY_RSLT_SUCCESS )</div>
 <div class="line">    {</div>
 <div class="line">        <span class="comment">/* Failure path */</span></div>
@@ -240,10 +275,10 @@ Snippet 2: Configure</h2>
 <div class="ttc" id="agroup__group__ecm__functions_html_ga807f76585391a681916a8dc81a4dcda4"><div class="ttname"><a href="group__group__ecm__functions.html#ga807f76585391a681916a8dc81a4dcda4">cy_ecm_set_filter_address</a></div><div class="ttdeci">cy_rslt_t cy_ecm_set_filter_address(cy_ecm_t ecm_handle, cy_ecm_filter_address_t *filter_address, uint8_t filter_address_count)</div><div class="ttdoc">Filter the receiving packets with the configured source or destination filter address.</div></div>
 <div class="ttc" id="agroup__group__ecm__functions_html_gaa1cd96de76219fb84660834f9e57a8bc"><div class="ttname"><a href="group__group__ecm__functions.html#gaa1cd96de76219fb84660834f9e57a8bc">cy_ecm_broadcast_disable</a></div><div class="ttdeci">cy_rslt_t cy_ecm_broadcast_disable(cy_ecm_t ecm_handle, bool is_broadcast_disable)</div><div class="ttdoc">Enable or Disable the incoming broadcast packets.</div></div>
 <div class="ttc" id="agroup__group__ecm__macros_html_ga43ff877491f0929ab58e1aac5386337a"><div class="ttname"><a href="group__group__ecm__macros.html#ga43ff877491f0929ab58e1aac5386337a">CY_ECM_MAC_ADDR_LEN</a></div><div class="ttdeci">#define CY_ECM_MAC_ADDR_LEN</div><div class="ttdoc">MAC address length</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:30</div></div>
-<div class="ttc" id="astructcy__ecm__filter__address__t_html"><div class="ttname"><a href="structcy__ecm__filter__address__t.html">cy_ecm_filter_address_t</a></div><div class="ttdoc">Structure containing the configuration parameters to configure Ethernet PHY and MAC to filter the add...</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:233</div></div>
-<div class="ttc" id="astructcy__ecm__filter__address__t_html_a4ca9a6d86b33c25e13f979565640970e"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#a4ca9a6d86b33c25e13f979565640970e">cy_ecm_filter_address_t::filter_addr</a></div><div class="ttdeci">uint8_t filter_addr[CY_ECM_MAC_ADDR_LEN]</div><div class="ttdoc">Address to be filtered.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:235</div></div>
-<div class="ttc" id="astructcy__ecm__filter__address__t_html_a7809135ec14d1f44ee2abbd6169e6521"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#a7809135ec14d1f44ee2abbd6169e6521">cy_ecm_filter_address_t::ignoreBytes</a></div><div class="ttdeci">uint8_t ignoreBytes</div><div class="ttdoc">For example, ignoreBytes = 0x01 implies that the first byte received should not be compared.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:236</div></div>
-<div class="ttc" id="astructcy__ecm__filter__address__t_html_aa99b2552a01757b8e882c12a97c2c282"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#aa99b2552a01757b8e882c12a97c2c282">cy_ecm_filter_address_t::filter_type</a></div><div class="ttdeci">cy_ecm_filter_type_t filter_type</div><div class="ttdoc">Type of address to be filtered.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:234</div></div>
+<div class="ttc" id="astructcy__ecm__filter__address__t_html"><div class="ttname"><a href="structcy__ecm__filter__address__t.html">cy_ecm_filter_address_t</a></div><div class="ttdoc">Structure containing the configuration parameters to configure Ethernet PHY and MAC to filter the add...</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:223</div></div>
+<div class="ttc" id="astructcy__ecm__filter__address__t_html_a4ca9a6d86b33c25e13f979565640970e"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#a4ca9a6d86b33c25e13f979565640970e">cy_ecm_filter_address_t::filter_addr</a></div><div class="ttdeci">uint8_t filter_addr[CY_ECM_MAC_ADDR_LEN]</div><div class="ttdoc">Address to be filtered.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:225</div></div>
+<div class="ttc" id="astructcy__ecm__filter__address__t_html_a7809135ec14d1f44ee2abbd6169e6521"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#a7809135ec14d1f44ee2abbd6169e6521">cy_ecm_filter_address_t::ignoreBytes</a></div><div class="ttdeci">uint8_t ignoreBytes</div><div class="ttdoc">For example, ignoreBytes = 0x01 implies that the first byte received should not be compared.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:226</div></div>
+<div class="ttc" id="astructcy__ecm__filter__address__t_html_aa99b2552a01757b8e882c12a97c2c282"><div class="ttname"><a href="structcy__ecm__filter__address__t.html#aa99b2552a01757b8e882c12a97c2c282">cy_ecm_filter_address_t::filter_type</a></div><div class="ttdeci">cy_ecm_filter_type_t filter_type</div><div class="ttdoc">Type of address to be filtered.</div><div class="ttdef"><b>Definition:</b> cy_ecm.h:224</div></div>
 </div><!-- fragment --><h2><a class="anchor" id="snip3"></a>
 Snippet 3: Connect</h2>
 <p >This code snippet demonstrates how to establish a connection to the ethernet and bring network up using the <a class="el" href="group__group__ecm__functions.html#ga47943ffea422b5e0581505e20f4f226d" title="Brings up the interface and configure to corresponding Ethernet port.">cy_ecm_connect()</a> API function.</p>

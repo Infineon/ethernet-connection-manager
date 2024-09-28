@@ -199,7 +199,7 @@ typedef cy_rslt_t (*cy_ecm_phy_get_linkspeed)(uint8_t eth_idx, uint32_t *duplex,
 typedef cy_rslt_t (*cy_ecm_phy_get_linkstatus)(uint8_t eth_idx, uint32_t *link_status);
 
 /**
- * ECM PHY Get Auto Negotiation callback function pointer type.
+ * ECM PHY Get Autonegotiation callback function pointer type.
  * Note: The callback function will be executed in the context of the ECM.
  */
 typedef cy_rslt_t (*cy_ecm_phy_get_auto_neg_status)(uint8_t eth_idx, uint32_t *neg_status);
@@ -246,16 +246,6 @@ typedef struct
 } cy_ecm_ip_setting_t;
 
 /**
- * Structure containing the configuration parameters to configure Ethernet PHY and MAC for data transfer handling
- */
-typedef struct
-{
-    cy_ecm_speed_type_t interface_speed_type; /**< Standard interface to be used for data transfer  */
-    cy_ecm_phy_speed_t phy_speed;             /**< Physical transfer speed */
-    cy_ecm_duplex_t mode;                     /**< Transfer mode */
-} cy_ecm_phy_config_t;
-
-/**
  * Structure containing the configuration parameters to configure Ethernet PHY and MAC to filter the address during data transfer
  */
 typedef struct
@@ -277,7 +267,7 @@ typedef struct cy_ecm_phy_callbacks
     cy_ecm_phy_enable_ext_reg phy_enable_ext_reg;               /**< Function pointer for Ethernet PHY enable extended registers.  */
     cy_ecm_phy_get_linkspeed phy_get_linkspeed;                 /**< Function pointer for Ethernet PHY get link speed.  */
     cy_ecm_phy_get_linkstatus phy_get_linkstatus;               /**< Function pointer for Ethernet PHY get link status.  */
-    cy_ecm_phy_get_auto_neg_status phy_get_auto_neg_status;     /**< Function pointer for Ethernet PHY get auto negotiation status.  */
+    cy_ecm_phy_get_auto_neg_status phy_get_auto_neg_status;     /**< Function pointer for Ethernet PHY get Autonegotiation status.  */
     cy_ecm_phy_get_link_partner_cap phy_get_link_partner_cap;   /**< Function pointer for Ethernet PHY get link partner capabilities.  */
 } cy_ecm_phy_callbacks_t;
 
@@ -357,7 +347,7 @@ cy_rslt_t cy_ecm_deinit( void );
  * \note
  * 1. Ethernet Connection Manager library returns error as required ethernet phy driver callbacks functions were not passed with this API.
  * 2. As a part of \ref cy_ecm_ethif_init, Ethernet driver initialization is called, which does GPIO and clock divider settings for the given physical configurations. But, Ethernet driver deinitialization is not available to clear these clock and GPIO settings.Hence, \ref cy_ecm_ethif_init cannot be called more than once in a single session, with different physical configurations.
- * 3. If either speed or duplex mode is set to AUTO, the auto-negotiation will be enabled. Application can call \ref cy_ecm_get_link_speed, to check the speed and duplex mode configured.
+ * 3. If either speed or duplex mode is set to AUTO, the Autonegotiation will be enabled. Application can call \ref cy_ecm_get_link_speed, to check the speed and duplex mode configured.
  *
  * @param[in]  eth_idx        : Ethernet port to be initialized
  * @param[in]  phy_callbacks  : Structure containing the Ethernet physical driver callback implementation for required ethernet PHY chip.
@@ -433,6 +423,8 @@ cy_rslt_t cy_ecm_set_filter_address(cy_ecm_t ecm_handle, cy_ecm_filter_address_t
  * Brings up the interface and configure to corresponding Ethernet port.
  *
  * This function brings up the network interface. This function should be called after calling the \ref cy_ecm_ethif_init ECM API.
+ *
+ * \note If DHCP or static IP is configured from device configurator, then the parameter static_ip_addr will be ignored.
  *
  * @param[in]  ecm_handle     : ECM handle created using \ref cy_ecm_ethif_init
  * @param[in]  static_ip_addr : Configuration of the static IP address. If NULL, the IP address is created using DHCP.
