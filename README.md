@@ -81,12 +81,7 @@ To pull ethernet-phy-driver create the following *.mtb* file in deps folder.
 	- To configure pin connections, refer "Quick Start" section of [Ethernet PHY Driver readme documentation](https://Infineon.github.io/ethernet-phy-driver/README.md)
     - Save the configuration to generate the necessary code.
 
-7. Add the CY_DISABLE_XMC7000_DATA_CACHE macro to the DEFINES in the code example's Makefile to disable data cache. The Makefile entry would look like as follows:
-       ```
-       DEFINES+=CY_DISABLE_XMC7000_DATA_CACHE
-       ```
-
-8. By default, the Ethernet Connection Manager library disables all debug log messages. Do the following to enable log messages:
+7. By default, the Ethernet Connection Manager library disables all debug log messages. Do the following to enable log messages:
     - Add the `ENABLE_ECM_LOGS` macro to the `DEFINES` in the code example's Makefile. The Makefile entry should look like as follows:
        ```
        DEFINES+=ENABLE_ECM_LOGS

@@ -13,6 +13,10 @@ See the [README.md](./README.md) for a complete description of the [ethernet con
 
 ## Changelog
 
+### v2.1.1
+
+- Added support for D-cache enablement on XMC7200 devices.
+
 ### v2.1.0
 
 - Added Network Interface settings, IP settings, Protocol settings, Memory settings and PHY pin configuration settings in the ModusToolbox&trade; Device Configurator.
@@ -40,8 +44,8 @@ This version of the library was validated for compatibility with the following s
 
 | Software and tools                                         | Version |
 | :---                                                       | :----:  |
-| ModusToolbox&trade; software environment                   | 3.2     |
-| ModusToolbox&trade; Device Configurator                    | 4.20    |
+| ModusToolbox&trade; software environment                   | 3.3     |
+| ModusToolbox&trade; Device Configurator                    | 5.10    |
 | GCC Compiler                                               | 11.3.1  |
-| IAR Compiler                                               | 9.40    |
-| Arm&reg; Compiler 6                                        | 6.16    |
+| IAR Compiler                                               | 9.50.2  |
+| Arm&reg; Compiler 6                                        | 6.22    |
