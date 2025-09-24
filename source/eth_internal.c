@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2025, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -82,7 +82,11 @@ static cy_stc_ethif_mac_config_t stcENETConfig = {
                 .bintrEnable         = 1,                           /** Interrupt enable  */
                 .dmaDataBurstLen     = CY_ETHIF_DMA_DBUR_LEN_4,
                 .u8dmaCfgFlags       = CY_ETHIF_CFG_DMA_FRCE_TX_BRST,
-                .mdcPclkDiv          = CY_ETHIF_MDC_DIV_BY_48,      /** source clock is 80 MHz and MDC must be less than 2.5MHz   */
+#if defined(CY_DEVICE_SERIES_PSOCE84)
+                .mdcPclkDiv          = CY_ETHIF_MDC_DIV_BY_96,      /** source clock is 200 MHz and MDC must be less than 2.5MHz   */
+#else
+                .mdcPclkDiv          = CY_ETHIF_MDC_DIV_BY_48,      /** source clock is 100 MHz and MDC must be less than 2.5MHz   */
+#endif
                 .u8rxLenErrDisc      = 0,                           /** Length error frame not discarded  */
                 .u8disCopyPause      = 0,
                 .u8chkSumOffEn       = 0,                           /** Checksum for both Tx and Rx disabled    */
@@ -286,8 +290,16 @@ cy_rslt_t cy_eth_driver_initialization(cy_ecm_interface_t eth_idx,
         Cy_SysInt_Init(&irq_cfg_eth0_q0, Cy_Eth0_InterruptHandler);
         Cy_SysInt_Init(&irq_cfg_eth0_q1, Cy_Eth0_InterruptHandler);
         Cy_SysInt_Init(&irq_cfg_eth0_q2, Cy_Eth0_InterruptHandler);
-        NVIC_ClearPendingIRQ((IRQn_Type)eth_0_INTRMUXNUMBER);
-        NVIC_EnableIRQ((IRQn_Type)eth_0_INTRMUXNUMBER);
+
+#if (!CY_IP_M7CPUSS)
+    NVIC_EnableIRQ((IRQn_Type) irq_cfg_eth0_q0.intrSrc);
+    NVIC_EnableIRQ((IRQn_Type) irq_cfg_eth0_q0.intrSrc);
+    NVIC_EnableIRQ((IRQn_Type) irq_cfg_eth0_q0.intrSrc);
+#else
+    NVIC_ClearPendingIRQ((IRQn_Type)eth_0_INTRMUXNUMBER);
+    NVIC_EnableIRQ((IRQn_Type)eth_0_INTRMUXNUMBER);
+#endif
+
 #endif
     }
     else

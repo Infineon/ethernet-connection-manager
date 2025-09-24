@@ -1,5 +1,5 @@
 /*
- * Copyright 2024, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2025, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -474,14 +474,22 @@ cy_rslt_t cy_ecm_ethif_init( cy_ecm_interface_t eth_idx,
     cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_INFO, "PHY interface mode  : %d \n", (int)phy_interface_type.mode );
 
     /* Prevent system to enter into deep sleep during ethernet initialization */
+#ifdef COMPONENT_MTB_HAL
+    mtb_hal_syspm_lock_deepsleep();
+#else
     cyhal_syspm_lock_deepsleep();
+#endif
 
     result = cy_eth_driver_initialization( ecm_obj->eth_idx, ecm_obj->eth_base_type, &phy_interface_type, &(ecm_obj->eth_phy_cb) );
     if( result != CY_RSLT_SUCCESS )
     {
         cy_ecm_log_msg( CYLF_MIDDLEWARE, CY_LOG_ERR, "ECM driver initialization failed with result = 0x%X\n", (unsigned long)result );
         /* Unlock to enter into deep sleep */
+#ifdef COMPONENT_MTB_HAL
+        mtb_hal_syspm_unlock_deepsleep();
+#else
         cyhal_syspm_unlock_deepsleep();
+#endif
         result = CY_RSLT_ECM_ERROR;
         goto exit;
     }
@@ -512,7 +520,11 @@ cy_rslt_t cy_ecm_ethif_init( cy_ecm_interface_t eth_idx,
     is_ethernet_initiated[ecm_obj->eth_idx] = true;
 
     /* Unlock to enter into deep sleep */
+#ifdef COMPONENT_MTB_HAL
+    mtb_hal_syspm_unlock_deepsleep();
+#else
     cyhal_syspm_unlock_deepsleep();
+#endif
 
     if(is_ecm_thread_created == 0)
     {

@@ -1,6 +1,5 @@
 var group__group__ecm__typedefs =
 [
-    [ "cy_ecm_t", "group__group__ecm__typedefs.html#ga0bee3cc16897346fc3def995951dd645", null ],
     [ "cy_ecm_mac_t", "group__group__ecm__typedefs.html#gaad746e38751703388a8eedd9d206e741", null ],
     [ "cy_ecm_phy_init", "group__group__ecm__typedefs.html#ga947b3ac98a892ba99534b536f86cfaa5", null ],
     [ "cy_ecm_phy_configure", "group__group__ecm__typedefs.html#gacf410fe886cae6f70c22289ec1fe9f8f", null ],

@@ -23,6 +23,8 @@ The library APIs are thread-safe. The library uses the ethernet configurations f
 This library and its features are supported on the following Infineon platforms:
 
 - [XMC7200 Evaluation Kit (KIT_XMC72_EVK)](https://www.infineon.com/KIT_XMC72_EVK)
+- [XMC7100 Evaluation Kit (KIT_XMC71_EVK_LITE_V1)](https://www.infineon.com/KIT_XMC71_EVK_LITE_V1)
+- PSOC&trade; Edge E84 Evaluation Kit.
 
 ## Quick Start
 

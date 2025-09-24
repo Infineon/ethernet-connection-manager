@@ -13,6 +13,12 @@ See the [README.md](./README.md) for a complete description of the [ethernet con
 
 ## Changelog
 
+### v2.2.0
+
+- Added support for PSOC&trade; Edge E84 (PSE84) platform.
+- Enabled LLVM_ARM toolchain support.
+- Updated to use MTB_HAL apis.
+
 ### v2.1.1
 
 - Added support for D-cache enablement on XMC7200 devices.
@@ -44,8 +50,9 @@ This version of the library was validated for compatibility with the following s
 
 | Software and tools                                         | Version |
 | :---                                                       | :----:  |
-| ModusToolbox&trade; software environment                   | 3.3     |
-| ModusToolbox&trade; Device Configurator                    | 5.10    |
-| GCC Compiler                                               | 11.3.1  |
+| ModusToolbox&trade; software environment                   | 3.6     |
+| ModusToolbox&trade; Device Configurator                    | 5.50    |
+| GCC Compiler                                               | 14.2.1  |
 | IAR Compiler                                               | 9.50.2  |
 | Arm&reg; Compiler 6                                        | 6.22    |
+| LLVM compiler                                              | 19.1.5  |
