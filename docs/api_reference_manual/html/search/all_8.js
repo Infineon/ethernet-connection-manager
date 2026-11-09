@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['v4_118',['v4',['../structcy__ecm__ip__address__t.html#a177cb55d87ee9315ec6526e893ee529b',1,'cy_ecm_ip_address_t']]],
-  ['v6_119',['v6',['../structcy__ecm__ip__address__t.html#a2b0fbbe49f63611eef3eb640e48ac44b',1,'cy_ecm_ip_address_t']]],
-  ['version_120',['version',['../structcy__ecm__ip__address__t.html#a398ba9930f73025b6d4d0f02df6d87a5',1,'cy_ecm_ip_address_t']]]
+  ['features_0',['features',['../index.html#autotoc_md17',1,'Configure Ethernet Features'],['../index.html#autotoc_md3',1,'Features']]],
+  ['filter_5faddr_1',['filter_addr',['../structcy__ecm__filter__address__t.html#a4ca9a6d86b33c25e13f979565640970e',1,'cy_ecm_filter_address_t']]],
+  ['filter_5ftype_2',['filter_type',['../structcy__ecm__filter__address__t.html#aa99b2552a01757b8e882c12a97c2c282',1,'cy_ecm_filter_address_t']]],
+  ['first_3',['Read Documentation First',['../index.html#autotoc_md8',1,'']]],
+  ['for_20infineon_20mcus_4',['Ethernet Connection Manager (ECM) - Wired Ethernet Connectivity for Infineon MCUs',['../index.html',1,'']]]
 ];
